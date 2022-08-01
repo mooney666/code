@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <script src="./axios.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class Root extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            courses: [], // 保存课程信息的数据
+            curPage: 1, // 当前页码
+          };
+        }
+        ajax = (url) => {
+          fetch(url)
+            .then((response) => response.json())
+            .then(({ data }) => {
+              console.log(data);
+              // this.setState({
+              //   courses: data,
+              // });
+
+              this.setState((state) => {
+                // 这里的返回值，会合并到this.state中
+                return {
+                  courses: data,
+                };
+              });
+            });
+        };
+        prevEvent = () => {};
+        nextEvent = () => {
+          /*
+          // 这种写法无法获取最新的页码
+          this.setState({
+            curPage: this.state.curPage + 1,
+          });
+          console.log(this.state.curPage);
+          */
+
+          /*
+          // 这里可以实现需求
+          this.setState(
+            {
+              curPage: this.state.curPage + 1,
+            },
+            () => {
+              console.log(`正在请求第${this.state.curPage}页`);
+              this.ajax(
+                `https://www.lanqb.com/api/course/video/indexv3?type=3&page=${this.state.curPage}&limit=20`
+              );
+            }
+          );
+          */
+
+          this.setState({
+            curPage: this.state.curPage + 1,
+          });
+          this.setState((state) => {
+            console.log(`正在请求第${state.curPage}页`);
+            this.ajax(
+              `https://www.lanqb.com/api/course/video/indexv3?type=3&page=${state.curPage}&limit=20`
+            );
+          });
+        };
+        render() {
+          let { courses, curPage } = this.state;
+          return (
+            <div className="root">
+              <button onClick={this.prevEvent}>上一页</button>
+              <span>当前页码:{curPage}</span>
+              <button onClick={this.nextEvent}>下一页</button>
+              <hr />
+              {courses.map((c) => (
+                <h3>{c.title}</h3>
+              ))}
+            </div>
+          );
+        }
+        componentDidMount() {
+          this.ajax(
+            `https://www.lanqb.com/api/course/video/indexv3?type=3&page=${this.state.curPage}&limit=20`
+          );
+        }
+      }
+      ReactDOM.render(<Root />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

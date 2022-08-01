@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class App extends React.Component {
+        state = {
+          nums: [10, 20, 30, 40],
+        };
+        setNums = () => {
+          let newNums = this.state.nums;
+          newNums.push(50);
+          // newNums.unshift(50);
+          this.setState({
+            nums: newNums,
+          });
+        };
+        render() {
+          return (
+            <div>
+              <div>
+                {this.state.nums.map((num, i) => (
+                  <p key={num}>{num}</p>
+                ))}
+              </div>
+              <hr />
+              <button onClick={this.setNums}>修改数据</button>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+      /*
+      key的作用：
+      主要是对DOM渲染进行性能优化。当列表元素顺序发生改变时，如果不加key，不管数据是否发生改变，所有列表元素都会重新渲染。当列表元素顺序没有发生改变时，只是在末尾产生新的元素，这时可以不加key，React只会渲染最后一个元素。
+      1. 不要使用索引作为key值，索引是会动态变化的，所有列表元素都会重新渲染。
+      2. key值要求唯一且不会变化。
+      */
+    </script>
+  </body>
+</html>

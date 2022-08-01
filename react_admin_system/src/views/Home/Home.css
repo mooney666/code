@@ -1,0 +1,31 @@
+.Home {
+  width: 100vw;
+  height: 100vh;
+}
+.Home .logo {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 22px;
+}
+.Home .ant-layout-has-sider {
+  width: 100%;
+  height: 100%;
+}
+.Home .ant-layout-header span {
+  color: white;
+  margin-left: 20px;
+}
+.Home .ant-layout-content {
+  padding: 0 !important;
+}
+.Home .site-layout {
+  height: 100vh;
+  overflow: hidden;
+}
+.Home .scroll-layout {
+  height: 100vh;
+  overflow-y: scroll;
+}

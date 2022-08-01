@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="./axios.js"></script>
+    <script>
+      /* 
+      async/await 处理异步操作
+          async/await 是 ES7 引入的新语法，可以更加方便的进行异步操作，不用再大量的设置promise.then()。
+          async 关键字用于函数上(async 函数的返回值是 Promise 的实例对象)
+          await 关键字必须用于 async 函数的内部, 它是修饰 Promise 对象(await 可以得到异步的结果)
+          优势：
+              1. 不再通过 then() 函数处理结果。
+              2. 方便多个异步操作
+      */
+      /*
+      async function ajax(url) {
+        // axios()返回的也是promise对象，使用await修饰之后，请求的结果不再通过.then接收了，而是直接返回使用变量接收即可。
+        // 注意：await 后面只能跟Promise对象，因此ajax()这个函数，必须要使用async修饰。
+        return await axios({
+          url,
+          method: "GET",
+        });
+        // return response.data; // 这里的return相当于之前的resolve(response.data)
+      }
+
+      // 写法一
+      ajax(`http://localhost:8080/test3`).then(({ data }) => {
+        console.log("---", data);
+      });
+      */
+
+      // 这个ajax等价于以前使用new Promise()封装的工具。
+      async function ajax(url) {
+        let response = await axios({ url });
+        return response.data;
+      }
+
+      async function test() {
+        // await 等待任务执行成功返回结果之后，JS线程才会继续往下执行代码，await会阻塞线程。
+        let data1 = await ajax("http://localhost:8080/test3");
+        console.log(data1);
+
+        let data2 = await ajax("http://localhost:8080/test4");
+        console.log(data2);
+      }
+      test();
+
+      // 利用 async/await 实现：异步任务同步执行的效果。
+    </script>
+  </body>
+</html>

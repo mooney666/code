@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkweb_admin"]=self["webpackChunkweb_admin"]||[]).push([[708],{9708:function(e,n,t){t.r(n),t.d(n,{default:function(){return r}});var u=t(3396),a=t(65),c={setup(e){let n=(0,a.oR)();return n.commit("changeNavList",["权限管理","权限列表"]),(e,n)=>((0,u.wg)(),(0,u.iD)("h1",null,"权限列表"))}};const i=c;var r=i}}]);
+//# sourceMappingURL=708.ab4a94ab.js.map

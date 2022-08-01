@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class Root extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            timetemp: Date.now(),
+            uname: "未知",
+            num: 1,
+          };
+        }
+        render() {
+          // console.log("render() 了");
+          let { timetemp, uname } = this.state;
+          return (
+            <div className="root">
+              <h4>Root组件</h4>
+              <p>
+                时间戳:{timetemp}, 姓名:{uname}
+              </p>
+              <button onClick={() => this.changeData("小王")}>setName</button>
+              <button onClick={this.changeDataOne}>立即更新</button>
+              <p>num: {this.state.num}</p>
+              <button onClick={this.changeDataTwo}>setNum</button>
+            </div>
+          );
+        }
+        changeDataTwo = () => {
+          // this.setState({
+          //   num: this.state.num + 1,
+          // });
+
+          this.setState(state => {
+            return {
+              num: state.num + 1,
+            };
+          });
+
+          // this.setState((state) => {
+          //   console.log(this.state.num);
+          //   console.log(state.num);
+          // });
+        };
+        changeDataOne = () => {
+          setInterval(() => {
+            this.setState({
+              timetemp: Date.now(),
+            });
+            console.log(this.state.timetemp);
+          }, 4000);
+        };
+        changeData(name) {
+          this.setState(
+            {
+              timetemp: "321321212",
+            },
+            () => {
+              console.log(this.state.timetemp); // 更新后的新数据
+            }
+          );
+          // console.log(this.state.timetemp); // 还是旧数据
+          this.setState(
+            {
+              uname: "王五",
+            },
+            () => {
+              console.log(this.state.uname); // 更新后的新数据
+            }
+          );
+          // console.log(this.state.uname); // 还是旧数据
+        }
+      }
+      ReactDOM.render(<Root />, document.getElementById("app"));
+      /*
+      1. React修改数据,一定使用setState, 页面会自动根据最新的state进行重新渲染；
+      2. setState()会批量合并更新，并不是每调用this.setState一次，组件就render()一次；在连续的this.setState的时候，最终只执行一次render()函数。这个render()是生成虚拟DOM的，最终是否转化真实DOM，还要看数据是否变化；
+      3. setState()可能是异步函数，不一定就立刻更新数据。关键看在什么情况下调用它；
+        - 3.1 在React控制的事件中，setState()是异步的，无法立刻获得最新数据；(比如：onClick、componentDidMount)
+          - 异步调用中想要立刻获取更新后的数据，可以将setState设置第二个参数回调函数，react会在数据更新后，立即执行回调函数；
+        - 3.2 在一些不受React控制的事件中，setState()是同步的，可以立刻获得最新数据；(比如：原生事件，定时器、延时器、addEventListener())
+      4. setState((state) => {}) 此时回调函数中的参数state是最新数据；平时也可以用 setState((state) => {return {num: 2}}) 替换 setState({num: 2})；
+      */
+    </script>
+  </body>
+</html>

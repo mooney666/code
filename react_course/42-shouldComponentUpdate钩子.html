@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      /*
+      在React中，当父组件的数据被修改了，render()了，默认情况下，所有内部的子组件，都会重新render()。
+
+      生命周期钩子：shouldComponentUpdate(nextProps, nextState)
+      它是React中唯一的一个性能优化钩子函数，如果项目性能没有问题，页面加载速度也比较快，这个钩子就不用使用了。
+      它这个钩子要求返回布尔值，返回true，就会调用当前组件的render()，生成虚拟DOM；返回false，就不会调用当前组件的render()，减少一些JS的计算过程；
+
+      1. 什么情况下子组件不需要render，既return false？
+        - 当子组件没有接收任何父组件传递的prop数据时，当父组件数据更新时，子组件不需要render；
+        - 对于组件本身的state来说，当调用setState的时候，数据并没有发生变化，此时组件自身也不应该render；
+
+      2. 什么情况下子组件需要render，既return true？
+        - 当子组件接收了父组件传递的prop数据时，当父组件数据更新时，子组件也需要render更新；
+        - 对于组件本身的state来说，当调用setState的时候，数据发生变化，此时组件自身应该render；
+      */
+      class App extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            tt: Date.now(),
+          };
+        }
+        shouldComponentUpdate(nextProps, nextState) {
+          // console.log("---", nextProps); // {}空对象
+          // console.log(nextState, this.state);
+          if (nextState.tt !== this.state.tt) {
+            return true;
+          }
+          return false;
+        }
+        render() {
+          console.log("app render() 了");
+          return (
+            <div className="app">
+              <h3>App组件</h3>
+              <p>时间戳: {this.state.tt}</p>
+              <button onClick={() => this.setState({ tt: Date.now() })}>
+                设置
+              </button>
+              <hr />
+              <Son tt={this.state.tt} />
+            </div>
+          );
+        }
+      }
+      class Son extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            sname: "小明",
+          };
+        }
+        shouldComponentUpdate(nextProps, nextState) {
+          // console.log(nextProps, this.props);
+          // nextProps: 父组件传过来的最新的prop；
+          // this.props: 保存是上一次的prop值；
+          if (
+            nextProps.tt !== this.props.tt ||
+            nextState.sname !== this.state.sname
+          ) {
+            return true;
+          }
+          return false;
+        }
+        render() {
+          console.log("son render() 了");
+          return (
+            <div className="son">
+              <h3>Son组件</h3>
+              <p>sname: {this.state.sname}</p>
+              <button
+                onClick={() => this.setState({ sname: this.state.sname + "1" })}
+              >
+                设置sname
+              </button>
+              <p>接收传值: {this.props.tt}</p>
+            </div>
+          );
+        }
+        componentDidMount() {}
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

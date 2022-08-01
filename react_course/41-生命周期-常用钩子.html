@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <script src="./axios.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      // 生命周期：组件从创建到销毁的整个过程，一共有三个阶段：创建阶段、运行阶段、销毁阶段。当组件被显示在页面中时，会被创建；组件从页面中消失了，会被销毁。(动态组件上理解组件的生命周期)
+
+      /* 
+      组件挂载阶段(初始渲染阶段)：
+      1. constructor: 在执行组件初始化时执行，可以给组件初始化state，或者给点击事件bind绑定this；只会触发一次；
+      2. render: 根据组件模板编译成虚拟DOM，此时页面还没有渲染；
+        - 不要在render内调用this.setState()，形成死循环；
+        - render由于会触发多次，只做数据渲染操作，比如结构props、state。不要在这发送请求等和渲染无关的操作；
+      3. componentDidMount: 组件已经挂载完毕，此时已经可以看到页面了，虚拟DOM已被转化为真实DOM了。可以在该函数操作DOM。只执行一次。
+        - 组件初始化请求，放在 componentDidMount 钩子中即可。虽然 constructor 也可以发送请求，且执行时机比 componentDidMount 更早，但是react对于初始化请求的发送，显然是等到组件挂载完毕之后才正式发送请求的异步任务的。因此初始化请求不会放在constructor中。 
+
+      组件更新阶段：
+      1. render: 三种情况会触发render函数的调用，a.父组件传递了新的Prop；b.子组件调用了setState()修改私有数据；c.forceUpdate()强制渲染。
+      2. componentDidUpdate: 新DOM更新完毕，此时可以获取最新的DOM结构。
+      以上两个钩子都是频繁执行的，只要props或state更新，它两就会执行。
+
+      组件销毁阶段：
+      component­Will­Unmount: 做一些清理组件内容的操作，比如定时器、添加的订阅，监听的事件(addEventListener)。
+      */
+
+      class App extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            comname: "login",
+            tt: Date.now(),
+          };
+        }
+        render() {
+          return (
+            <div className="app">
+              <h3>App组件</h3>
+              <button onClick={() => this.setState({ tt: Date.now() })}>
+                时间戳
+              </button>
+              <button onClick={() => this.setState({ comname: "login" })}>
+                登录
+              </button>
+              <button onClick={() => this.setState({ comname: "regist" })}>
+                注册
+              </button>
+              {this.state.comname === "login" ? (
+                <Login tt={this.state.tt} />
+              ) : (
+                <Regist />
+              )}
+            </div>
+          );
+        }
+      }
+      class Login extends React.Component {
+        constructor() {
+          console.log("login组件初始化");
+          super();
+          this.state = {
+            objData: null,
+          };
+          // this.initAjax();
+        }
+        timer = null;
+        initAjax = () => {
+          axios
+            .get(
+              "https://www.lanqb.com/school/professional?status=show&limit=20&page=1&course_style_ids=&weight=desc"
+            )
+            .then(({ data: { data: result } }) => {
+              console.log("请求成功");
+              this.setState({ objData: result });
+            });
+        };
+        render() {
+          console.log("login组件渲染");
+          return (
+            <div className="login">
+              <h3>Login组件</h3>
+              <p id="tt">时间戳: {this.props.tt}</p>
+              <p>{JSON.stringify(this.state.objData)}</p>
+            </div>
+          );
+        }
+        componentDidMount() {
+          console.log("login组件挂载完毕");
+          this.initAjax();
+          this.timer = setInterval(() => {
+            console.log("========");
+          }, 1000);
+        }
+        componentDidUpdate() {
+          console.log(document.getElementById("tt").innerText);
+        }
+        componentWillUnmount() {
+          console.log("login被销毁");
+          clearInterval(this.timer);
+        }
+      }
+      class Regist extends React.Component {
+        constructor() {
+          super();
+        }
+        render() {
+          return (
+            <div className="regist">
+              <h3>Regist组件</h3>
+            </div>
+          );
+        }
+        componentWillUnmount() {
+          console.log("regist被销毁");
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

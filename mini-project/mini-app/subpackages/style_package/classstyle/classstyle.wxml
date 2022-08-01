@@ -1,0 +1,52 @@
+<view>
+  <view class="'view' {{bgc}} {{styles}}">块元素</view>
+  <view>
+    <radio-group bindchange="radioEvent">
+      <label class="radio">
+        <radio value="blue" checked="true" />蓝色
+      </label>
+      <label class="radio">
+        <radio value="red" />红色
+      </label>
+      <label class="radio">
+        <radio value="black" />黑色
+      </label>
+    </radio-group>
+  </view>
+  <view>
+    <checkbox-group bindchange="checkboxChange">
+      <label>
+        <checkbox value="fontsize" />字体大小
+      </label>
+      <label>
+        <checkbox value="border" />边框
+      </label>
+      <label>
+        <checkbox value="color" />字体颜色
+      </label>
+    </checkbox-group>
+  </view>
+  <view>
+    <input class="search" type="text" bindinput="inputEvent" />
+  </view>
+  <view>
+    <input class="search" type="text" bindinput="inputEvent" />搜索
+  </view>
+  <view>
+    <input class="search" type="text" model:value="{{search}}" /><button bindtap="searchTest">搜索</button>
+  </view>
+  <view>
+    <button style="{{btnStyle}}">按钮</button>
+    <radio-group bindchange="fontRadioEvent">
+      <label class="radio">
+        <radio value="20rpx" />20rpx
+      </label>
+      <label class="radio">
+        <radio value="40rpx" />40rpx
+      </label>
+      <label class="radio">
+        <radio value="60rpx" />60rpx
+      </label>
+    </radio-group>
+  </view>
+</view>

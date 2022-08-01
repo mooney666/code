@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>姓名</th>
+          <th>性别</th>
+          <th>专辑总数</th>
+          <th>总销量</th>
+          <th>专辑列表</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <select>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <span>条/页</span>
+    <div id="page"></div>
+    <script>
+      let isFirst = true;
+      function getSingers(page, size) {
+        $("tbody").html("");
+        $.get(
+          `http://localhost:8080/list?page=${page}&size=${size}`,
+          (data) => {
+            // 1. 根据返回的数据，将其展示到tbody中。
+            data.sings.forEach((singer, idx) => {
+              let tr = $("<tr></tr>");
+              $("tbody").append(tr);
+
+              let nameTD = $("<td></td>");
+              nameTD.text(singer.name);
+              tr.append(nameTD);
+
+              let sexTD = $("<td></td>");
+              sexTD.text(singer.sex);
+              tr.append(sexTD);
+
+              let numsTD = $("<td></td>");
+              numsTD.text(singer.list.length);
+              tr.append(numsTD);
+
+              let saleTD = $("<td></td>");
+              let saleNums = 0;
+              let listTD_content = "";
+              singer.list.forEach((obj) => {
+                saleNums += obj.saleNum;
+                listTD_content += `<div>${obj.name}</div>`;
+              });
+              saleTD.text(saleNums);
+              tr.append(saleTD);
+
+              let listTD = $("<td></td>");
+              listTD.html(listTD_content);
+              tr.append(listTD);
+            });
+
+            // 2. 加载分页按钮
+            if (isFirst) {
+              $("#page").html("");
+              for (let i = 1; i <= data.nums; i++) {
+                $(
+                  `<button onclick="getSingers(${i}, 2)">${i}</button>`
+                ).appendTo($("#page"));
+              }
+            }
+            isFirst = false;
+          }
+        );
+      }
+      getSingers(1, 2); // 初始化请求第一页数据。
+
+      // select事件
+      $("select").change((e) => {
+        let size = e.target.value;
+        getSingers(1, size);
+        isFirst = true;
+      });
+    </script>
+  </body>
+</html>

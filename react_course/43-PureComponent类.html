@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      /*
+      PureComponent: 它是默认实现了shouldComponentUpdate()钩子，内部会根据props和state是否发生变化，做出浅层对比，从而让当前组件或子组件进行渲染优化，提升性能。
+      */
+      class App extends React.PureComponent {
+        constructor() {
+          super();
+          this.state = {
+            tt: Date.now(),
+            // tt: "1111",
+          };
+        }
+        render() {
+          console.log("app render() 了");
+          return (
+            <div className="app">
+              <h3>App组件</h3>
+              <p>时间戳: {this.state.tt}</p>
+              <button onClick={() => this.setState({ tt: Date.now() })}>
+                设置
+              </button>
+              <hr />
+              <Son />
+            </div>
+          );
+        }
+      }
+      class Son extends React.PureComponent {
+        constructor() {
+          super();
+          this.state = {
+            sname: "小明",
+          };
+        }
+        render() {
+          console.log("son render() 了");
+          return (
+            <div className="son">
+              <h3>Son组件</h3>
+              <p>sname: {this.state.sname}</p>
+              <button
+                onClick={() => this.setState({ sname: this.state.sname + "1" })}
+              >
+                设置sname
+              </button>
+              <p>接收传值: {this.props.tt}</p>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

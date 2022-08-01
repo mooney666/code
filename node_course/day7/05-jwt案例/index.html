@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+    <style>
+      .logined {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nologin">
+      <button>登录</button>
+    </div>
+    <div class="logined">
+      <span></span>
+      <button>购物车</button>
+    </div>
+    <script>
+      let token = localStorage.getItem("token");
+      if (token) {
+        $(".nologin").css("display", "none");
+        $(".logined").css("display", "block");
+      }
+
+      $(".nologin > button").click(() => {
+        $.post("http://localhost:9000/noauth/login", (data) => {
+          console.log(data);
+          $(".logined").css("display", "block");
+          $(".logined span").text(data.nickname);
+          $(".nologin").css("display", "none");
+          localStorage.setItem("token", data.token);
+        });
+      });
+
+      $(".logined button").click(() => {
+        $.ajax({
+          url: "http://localhost:9000/auth/cart",
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          success: function (data) {
+            console.log("===", data);
+            if (data.status == 100) {
+              localStorage.removeItem("token");
+            }
+          },
+        });
+      });
+
+      // 测试：未登录情况下，访问购物车接口
+      // UnauthorizedError: No authorization token was found
+      // $.get("http://localhost:9000/auth/cart", (data) => {
+      //   console.log("---", data);
+      // });
+
+      // 测试2：携带非法的token
+      // UnauthorizedError: Format is Authorization: Bearer [token]
+      // $.ajax({
+      //   url: "http://localhost:9000/auth/cart",
+      //   method: "GET",
+      //   headers: {
+      //     Authorization: "Bearer " + "123456"
+      //   },
+      //   success: function (data) {
+      //     console.log(data);
+      //   },
+      // });
+    </script>
+  </body>
+</html>

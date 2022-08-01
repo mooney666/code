@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <title>React Hooks</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      // 闭包：在一个函数内部，创建了一个新函数，且这个新函数使用了外部这个函数的变量。
+      // function sum() {
+      //   let a = 100;
+      //   let age = 20;
+      //   function test() {
+      //     let b = 200;
+      //     console.log(a);
+      //   }
+      //   test();
+      // }
+      // sum();
+
+      // Hooks使用注意事项：
+      // 1. 不要在一个class组件内部，使用Hook；
+      // 2. Hook只能用在函数组件中，且只能写在函数组件的顶层；
+      // 3. Hook不要写在for循环、if等代码块中，只能位于函数组件顶层；
+      // 4. 项目中可以同时存在class类组件和hook组件；
+    </script>
+  </body>
+</html>

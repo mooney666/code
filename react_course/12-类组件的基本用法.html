@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script type="text/babel">
+      // 类组件的特点：
+      // 1. 类组件可以声明自己的私有数据；当然也可以通过props接收外部传递的数据；
+      // 2. 类组件有组件生命周期(创建 - 运行 - 销毁); 函数组件是没有生命周期的;
+
+      class Man extends React.Component {
+        render() {
+          return (
+            <div className="man">
+              <h4>Man组件</h4>
+              <p>文章: {this.props.title}</p>
+            </div>
+          );
+        }
+      }
+
+      // 声明根组件:
+      class RootCom extends React.Component {
+        // render() 是一个生命周期函数, 类组件中唯一一个必须实现的生命周期函数. 它主要负责渲染JSX虚拟DOM的.
+        render() {
+          // props: 接收外部传值
+          // state: 声明类组件私有数据
+          // console.log(this); // 类组件的this代表当前组件的实例对象, 它里面包含 context/props/state 三个常用属性.
+          let { uname, uage, isman } = this.props;
+          return (
+            <div className="root">
+              <h3>我是根组件</h3>
+              <p>
+                姓名:{uname}, 年龄:{uage}, 性别:{isman ? "男" : "女"}
+              </p>
+              <p>
+                {this.props.uname} - {this.props.uage} -
+                {this.props.isman ? "男" : "女"}
+              </p>
+              <hr />
+              <Man title="西游记"></Man>
+            </div>
+          );
+        }
+      }
+      // 挂载: 将JSX组件模板, 挂载到#main这个div上
+      // <RootCom />: 它实际上是在 实例化(new RootCom()) 对象, 就是在创建组件.
+
+      // 这个root就是虚拟DOM.
+      // 真实DOM为了描述标签结构, 虚拟DOM为了描述JSX结构.
+      // React为了和真实DOM区分, 将root这个对象描述为虚拟DOM, 这个虚拟DOM与JSX组件模板是映射关系, 最终React会将虚拟DOM渲染为真实DOM.
+      let root = <RootCom uname="小明" uage={20} isman={false} />;
+      // console.log("root: ", root);
+      ReactDOM.render(root, document.getElementById("main"));
+
+      // 这个div就是真实DOM.
+      // DOM本质上就是一个对象, JS通过DOM对象来描述一个标签结构. DOM的出现就是为了在js中更加方便的操作标签而设计的, 它是html标签和js之间的桥梁.
+      // let div = document.getElementById("main");
+      // console.dir(div);
+    </script>
+  </body>
+</html>

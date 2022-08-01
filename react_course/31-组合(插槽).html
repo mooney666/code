@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      /*
+      let isLogin = true;
+      class App extends React.Component {
+        render() {
+          const { children } = this.props;
+          return (
+            <div className="app">
+              {children[0]}
+              <h3>根组件</h3>
+              {children[1]}
+              <hr />
+              {children[2]}
+            </div>
+          );
+        }
+      }
+      function Login() {
+        return (
+          <div class="login">
+            <h3>登录组件</h3>
+          </div>
+        );
+      }
+      function Regist() {
+        return (
+          <div class="regist">
+            <h3>注册组件</h3>
+          </div>
+        );
+      }
+      let app = (
+        <App name="小明">
+          <p>我是p标签</p>
+          <span>span标签</span>
+          {isLogin ? <Login /> : <Regist />}
+        </App>
+      );
+      ReactDOM.render(app, document.getElementById("app"));
+      */
+
+      /*
+      // 这种写法：每次创建 <ElForm /> 组件时，得到的都是相同的表单结构，此时这种表单结构只适合一种场景了，无法实现多场景适用。
+      class ElForm extends React.Component {
+        render() {
+          return (
+            <div>
+              <form className="form">
+                <input />
+                <input />
+                <input />
+                <select>
+                  <option></option>
+                  <option></option>
+                  <option></option>
+                </select>
+              </form>
+            </div>
+          );
+        }
+      }
+      */
+
+      // 下面通过组合的方式，封装form表单组件，可以让这个form结构更加灵活多变，适用场景更加丰富。从而实现组件的重用。
+      class ElForm extends React.Component {
+        render() {
+          const { children } = this.props;
+          console.log("---", children);
+          return (
+            <div>
+              <form className="form">
+                {children instanceof Array
+                  ? children.map(input => {
+                      return input;
+                    })
+                  : children}
+              </form>
+            </div>
+          );
+        }
+      }
+      function ElInput() {
+        return <input type="text" />;
+      }
+      function ElSelect(props) {
+        return <select>{props.children.map(opt => opt)}</select>;
+      }
+      function ElOption(props) {
+        return <option value={props.value}>{props.children[0]}</option>;
+      }
+      let root = (
+        <div>
+          <ElForm>
+            <ElInput></ElInput>
+            <ElInput></ElInput>
+            <ElSelect>
+              <ElOption value="1">1</ElOption>
+              <ElOption value="2">2</ElOption>
+              <ElOption value="3">3</ElOption>
+              <ElOption value="4">4</ElOption>
+            </ElSelect>
+          </ElForm>
+          <hr />
+          <ElForm>
+            <ElInput></ElInput>
+            <ElInput></ElInput>
+            <ElInput></ElInput>
+            <ElInput></ElInput>
+          </ElForm>
+          <hr />
+          <ElForm>
+            <ElSelect>
+              <ElOption value="1">1</ElOption>
+              <ElOption value="2">2</ElOption>
+              <ElOption value="3">3</ElOption>
+              <ElOption value="4">4</ElOption>
+            </ElSelect>
+          </ElForm>
+        </div>
+      );
+      ReactDOM.render(root, document.getElementById("app"));
+    </script>
+  </body>
+</html>

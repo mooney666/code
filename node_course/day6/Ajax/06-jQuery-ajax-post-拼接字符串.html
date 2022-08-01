@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div id="div">暂无数据</div>
+    <button>获取信息</button>
+    <script>
+      $("button").click(() => {
+        //#region POST请求方式一：$.post()，和$.get()类似，只能发送最基本的请求，不能配置请求头等信息。
+        // $.post("http://localhost:8080/login", (data, status, xhr)=> {
+        //     $("#div").text(data);
+        // })
+        //#endregion
+
+        //#region POST请求方式二：$.ajax()
+        // 注意：POST请求，默认携带参数是 application/x-www-form-urlencoded 这种格式的，无需额外配置content-type请求头了。除非你需要其他格式。
+        $.ajax({
+          method: "POST",
+          url: "http://localhost:8080/login",
+          data: {
+            uname: "admin",
+            upwd: "admin",
+          }, // data表面是一个对象，实际最终会被 application/x-www-form-urlencoded 转化为为 uname="admin"&upwd="admin"。
+          // contentType: "application/x-www-form-urlencoded",
+          //   headers: {
+          //     "content-type": "application/x-www-form-urlencoded",
+          //   },
+          success: function (data) {
+            $("#div").text(data);
+          },
+        });
+        //#endregion
+      });
+    </script>
+  </body>
+</html>

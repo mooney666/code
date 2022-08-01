@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/prop-types/15.8.1/prop-types.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class App extends React.Component {
+        render() {
+          return (
+            <div className="app">
+              <h3>App组件</h3>
+              <hr />
+              <Son age="22" sex={true} info={{ a: 1, b: 2 }} />
+            </div>
+          );
+        }
+      }
+      class Son extends React.Component {
+        constructor() {
+          super();
+          this.state = {};
+        }
+        // defaultProps: 设置prop默认值，当父组件没有传递这个属性，可以使用默认值。
+        static defaultProps = {
+          name: "小明",
+        };
+        // propTypes: 类型检查，类型不匹配，控制台报警告，仅在脚手架的开发模式下生效，生产环境不生效。propTypes 也会检查 defaultProps 默认值。
+        static propTypes = {
+          name: PropTypes.string.isRequired,
+          age: PropTypes.number,
+          sex: PropTypes.bool,
+          info: PropTypes.object,
+        };
+
+        render() {
+          return (
+            <div className="app">
+              <h3>Son组件</h3>
+            </div>
+          );
+        }
+      }
+      /*
+      Son.propTypes = {
+        name: PropTypes.string.isRequired,
+        age: PropTypes.number,
+        sex: PropTypes.bool,
+        info: PropTypes.object,
+      };
+      */
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+<!--pages/list/list.wxml-->
+<view class="list">
+  <text>欢迎进入列表页</text>
+  <!-- switchTab: 跳转tabbar页面，同时会关闭所有非tabbar页面，不能返回了 -->
+  <navigator url="/pages/cates/cates" open-type="switchTab">进入分类页</navigator>
+  <!-- navigateBack: 返回上一页，默认返回1层 -->
+  <navigator url="/pages/index/index" open-type="navigateBack">返回</navigator>
+  <button bindtap="back">返回</button>
+  <text>id: {{id}}, kw: {{kw}}</text>
+</view>
+

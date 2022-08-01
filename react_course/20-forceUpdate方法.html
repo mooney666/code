@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class Root extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            nums: [1, 2, 3, 4, 5],
+            user: {
+              name: "小明",
+              other: {
+                address: "郑州市",
+              },
+            },
+          };
+        }
+        prevEvent = () => {
+          // 值类型：基本数据类型 string number boolean，每次赋值都是全新的数据。
+          // let a = 10;
+          // let b = a;
+          // a = 100;
+          // console.log(b); // 10
+
+          // 引用类型：对象类型 array object，每次赋值，都是将对象[]/{}的内存地址，保存到变量中，因此，a b c指向的都是同一个对象。
+          // let a = [1, 2, 3];
+          // let b = a;
+          // let c = b;
+          // c[0] = 100;
+          // console.log(a, b, c);
+
+          // 场景：修改nums值的时候，不是直接替换初始值，而是在原有值的基础上修改。
+
+          // 1. 先将初始值接收出来，更新数据
+          let oldNums = this.state.nums;
+          oldNums.splice(0, 0, 200);
+          // oldNums[0] = 100;
+          // this.state.nums[0] = 100;
+          // console.log(this.state);
+
+          // 2. 将更新后的数据，重新赋值
+          this.setState({
+            nums: this.state.nums,
+          });
+        };
+        nextEvent = () => {
+          let oldUser = this.state.user;
+          // oldUser["name"] = "小王"; // 页面可以渲染新数据
+          // oldUser.other.address = "南京市"; // 页面可以渲染新数据
+          // oldUser["age"] = 22;
+
+          delete oldUser["name"];
+
+          this.forceUpdate(); // 强制渲染页面，该方法一般应用于页面无法正常渲染的情况；
+        };
+        render() {
+          let { nums, user } = this.state;
+          return (
+            <div className="root">
+              <button onClick={this.prevEvent}>修改数组nums</button>
+              <button onClick={this.nextEvent}>修改对象user</button>
+              <hr />
+              <div>
+                {nums.map((n) => (
+                  <h3>{n}</h3>
+                ))}
+              </div>
+              <div>{JSON.stringify(user)}</div>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<Root />, document.getElementById("app"));
+
+      /*
+      React对于引用类型的数据，也能实现深层次的监听，对于数组/对象，新增/删除/修改，React都能将其渲染出来。而vue中是无法实现引用类型的深层次监听。
+      */
+    </script>
+  </body>
+</html>

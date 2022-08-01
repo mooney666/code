@@ -1,0 +1,56 @@
+<!--index.wxml-->
+<import src="../../templates/login.wxml" />
+<import src="../../templates/regist.wxml" />
+<view class="container">
+  <text>姓名:{{uname+'---'}}</text>
+  <text>年龄:{{uage + '岁'}}</text>
+  <text>性别:{{usex?'男':'女'}}</text>
+  <view>数组:{{uarr}}</view>
+  <view>对象:{{uinfo.address}}</view>
+  <view wx:for="{{uarr}}" wx:key="index">index:{{index}}, item:{{item}}</view>
+  <view wx:for="{{users}}" wx:key="i" wx:for-index="i" wx:for-item="user">index:{{i}}, item:{{user.name}}</view>
+  <view>
+    <text wx:if="{{isshow}}">isshow是True，我就显示</text>
+    <text wx:else>isshow是False，我就不显示</text>
+  </view>
+  <view>
+    <text hidden="{{isshow}}">isshow是True，我就显示</text>
+    <text hidden>isshow是False，我就不显示</text>
+  </view>
+  <view>
+    <button bindtap="loginEvent">登录</button>
+    <button bindtap="registEvent">注册</button>
+    <view>
+      <text hidden="{{type === 'login'}}">注册</text>
+      <text hidden="{{type === 'regist'}}">登录</text>
+    </view>
+    <view>
+      <template is="{{type}}" data="{{name: '哈哈', age: 22}}"></template>
+    </view>
+    <view>
+      <template is="{{type}}" data="{{name: '123', age: 22}}"></template>
+    </view>
+  </view>
+  <view>事件绑定和传参</view>
+  <button bindtap="event1">事件1</button>
+  <button bind:tap="event2">事件2</button>
+  <button bind:tap="event3" data-id="101" data-kw="热门">事件3</button>
+  <view>navigator导航跳转</view>
+  <!-- navigate: 只能往小程序内部的非tabbar页面跳转，当前页面不会消失，可以重新返回。 -->
+  <navigator url="/subpackages/style_package/list/list?id=100&kw=abc" open-type="navigate">进入列表页</navigator>
+  <!-- redirect: 关闭当前页面，重定向到某个页面，没法返回上一页，没有历史记录了。 -->
+  <navigator url="/subpackages/style_package/list/list" open-type="redirect">进入列表页(重定向)</navigator>
+  <!-- reLaunch: 关闭所有页面，重载到某个页面，没法返回上一页，没有历史记录了。 -->
+  <navigator url="/subpackages/style_package/list/list" open-type="reLaunch">进入列表页(reLaunch)</navigator>
+  <view>通过API跳转</view>
+  <button bindtap="enterToList">进入列表页</button>
+  <van-button type="primary">按钮</van-button>
+</view>
+
+<!-- 定义组件模板：name属性是组件模板名称 -->
+<!-- <template name="login">
+  <view class="login">登录组件-{{name}}-{{age}}</view>
+</template>
+<template name="regist">
+  <view class="regist">注册组件-{{name}}-{{age}}</view>
+</template> -->

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .nav {
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        background-color: lightblue;
+      }
+      .content {
+        height: 200px;
+        line-height: 200px;
+        text-align: center;
+        background-color: red;
+      }
+      .footer {
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        background-color: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script type="text/babel">
+      // 函数组件特征：
+      // 1. 它不能声明自己的私有数据. 私有数据需要使用class类组件;
+      // 2. 它可以通过形参props, 负责接收从外部传给当前组件的prop数据;
+      // 使用场景: 一般用函数组件适合封装静态组件(没有动态数据), 不需要私有数据. 比如: 导航条, footer, 侧边导航;
+      function NavCom(props) {
+        console.log(props);
+        const { title, desc } = props;
+        return (
+          <div className="nav">
+            {title}: {desc}
+          </div>
+        );
+      }
+      function ContentCom(props) {
+        return (
+          <div className="content">
+            {props["content-title"]}: {props.contentDesc}
+          </div>
+        );
+      }
+      function FooterCom(props) {
+        console.log("-----", props);
+        return <div className="footer">底部组件</div>;
+      }
+      function RootCom(props) {
+        return (
+          <div className="container">
+            <p>{props.title}</p>
+            {/*这里的title和desc, 称为prop属性. 和html规范里的自定义属性不一样.*/}
+            <NavCom title="导航条" desc="这是一个公共导航条" />
+            <ContentCom
+              content-title="内容"
+              contentDesc="这是内容组件ContentCom"
+            ></ContentCom>
+            <FooterCom
+              age={22}
+              isMan={true}
+              other={{ address: "郑州市", weight: 180 }}
+              arr={[10,20,30]}
+            ></FooterCom>
+          </div>
+        );
+      }
+      // <RootCom /> 根组件，最上层的组件了。
+      ReactDOM.render(
+        <RootCom title="根组件" />,
+        document.querySelector("#main")
+      );
+    </script>
+  </body>
+</html>

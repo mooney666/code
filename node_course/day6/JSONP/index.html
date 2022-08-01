@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=4, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- 
+    JSONP跨域：主要是利用script的src属性，向接口发送请求，因为对于浏览器来说，标签src属性加载第三方地址，浏览器不会阻止，也就不存在跨域问题。
+    浏览器不阻止src跨域原因：
+    1. 给网站设计带来不必要的麻烦，因为script可能会引入很多第三方资源；
+    2. script利用src解决跨域，也只针对GET请求；
+
+    思路：
+    1. 前端提前声明好一个函数，将这个函数随着接口的请求，以?callback=func参数的形式，传递给后端；
+    2. 后端接口收到请求，可以提取参数，然后将函数名称和后端准备好的数据拼接，拼接为调用的形式"getData({})"，但是后端是不能直接调这个函数，因此，这个拼接好的调用形式还会返回给前端，最终由前端调用。
+
+    总结：
+    1. JSONP跨域：需要后端配合；
+    2. CORS包跨域：需要后端配合；
+    3. 代理服务器跨域：不需要后端配合；
+  -->
+  <script>
+    function getData(data) {
+      console.log("----", data);
+    }
+  </script>
+  <script src="http://localhost:8080/user?cb=getData"></script>
+</body>
+</html>

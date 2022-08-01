@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      /* 
+            fetch 请求参数
+                1. 常用配置选项
+                    method(String): 请求方式，默认是 get(get,post,put,delete)
+                    body(String): 请求参数
+                    headers(Object): 请求头,默认 {}
+        */
+      fetch("http://127.0.0.1:8080/test4?name=admin&age=22", {
+        method: "get",
+        // body: "name=admin&age=22", // GET请求不能使用body参数
+      })
+        .then(function (data) {
+          return data.json();
+        })
+        .then(function (data) {
+          console.log(data);
+        });
+    </script>
+  </body>
+</html>

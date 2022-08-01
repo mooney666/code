@@ -1,0 +1,16 @@
+<!--
+  小程序动画：
+  1. 过渡效果；
+  2. 关键帧动画；
+  3. 小程序提供的动画API；
+-->
+<view>
+  <view class="'ani' {{transition}}">块元素</view>
+  <button bindtap="transitionEvent">过渡动画</button>
+  <view class="'ani1' {{keyframe}} {{keyframestop}}">块元素</view>
+  <button bindtap="kframeEvent">帧动画开始</button>
+  <button bindtap="kframeStopEvent">帧动画停止</button>
+  <button bindtap="kframeStartEvent">帧动画继续</button>
+  <view class="ani" animation="{{ani}}">块元素</view>
+  <button bindtap="apiEvent">API动画开始</button>
+</view>

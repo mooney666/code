@@ -1,0 +1,5 @@
+<view>
+  <image class="img" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1112%2F061519115S2%2F1Z615115S2-8-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660265099&t=0b6eb86b76763ae0a23ba6f6f72c2d16" mode="center" />
+  <image class="imgs" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1112%2F051519134149%2F1Z515134149-1-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660266653&t=4d52a00356a48f00218505f2df14b6b5" mode="aspectFit" lazy-load="false" bindtap="previewEvent" />
+</view>
+  

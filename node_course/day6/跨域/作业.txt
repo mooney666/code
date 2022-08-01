@@ -1,0 +1,4 @@
+1. 代理服务器的原理和配置要理解，并且熟练使用；
+2. 利用代理服务器实现第三方接口的数据获取和展示；
+  网站地址：https://www.lanqb.com/school
+  接口地址：https://www.lanqb.com/school/professional?status=show&limit=20&page=1&course_style_ids=&weight=desc

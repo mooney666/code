@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/react@18.1.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18.1.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script type="text/babel">
+      let username = "小明";
+      let isMan = true;
+      let age = 30;
+      let arr = [10, 20, 30, 40];
+      let user = {
+        uname: "小红",
+        uage: 22,
+      };
+
+      // JSX中使用{}来展示数据，这个{}也可以设置简单的JS表达式.
+      let div = (
+        <div className="container">
+          <p>姓名: {username}</p>
+          <p>性别: {isMan}, 默认布尔类型数据, React无法直接展示</p>
+          <p>性别: {isMan ? "男" : "女"}</p>
+          <p>年龄: {age}岁</p>
+          <p>数组: {arr}, 默认React将数组拼接成字符串了。</p>
+          <p>数组遍历: {arr.map((num) => num + "-")}</p>
+          <div>
+            数组遍历:
+            {arr.map((num) => (
+              <div>
+                <span>{num}</span>
+              </div>
+            ))}
+          </div>
+          <div>
+            数组遍历：
+            {arr.map((num) => {
+              return (
+                <div className="d">
+                  <a href="#">{num + 1}</a>
+                </div>
+              );
+            })}
+          </div>
+          <div>
+            对象: {JSON.stringify(user)}, 注意:
+            对象不能直接展示。可以转成JSON字符串。
+          </div>
+          <div>
+            姓名: {user.uname}, 年龄: {user.uage}
+          </div>
+        </div>
+      );
+      let root = ReactDOM.createRoot(document.getElementById("main"));
+      root.render(div);
+
+      // React渲染过程：
+      // 1. 使用JSX声明React元素结构，这个结构就是React生成真实DOM的模板；
+      // 2. 这些JSX模板被babel编译成React.createElemet()；
+      // 3. 由React.createElemet()将这些React元素渲染为虚拟DOM；
+      // 4. render()函数，将这些虚拟DOM渲染为真实DOM，将虚拟DOM节点插入body中；
+    </script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script src="./axios.js"></script>
+    <script>
+      // async/await 处理多个异步操作
+      // 且后一个请求需要前一个请求的结果
+
+      axios.defaults.baseURL = "http://127.0.0.1:8080/";
+
+      async function queryData() {
+        let info = await axios.get("/async1");
+        let result = await axios.get("/async2?info=" + info.data);
+        console.log(result);
+        return result;
+      }
+      queryData().then((result) => {
+        console.log(result.data);
+      });
+
+      // 总结：通过 async 和 await ，
+      //      1. 多个异步请求的执行顺序
+      //      2. 代码的可读性增加
+    </script>
+  </body>
+</html>

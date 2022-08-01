@@ -1,0 +1,10 @@
+<!--pages/cart/cart.wxml-->
+<view>
+  <van-datetime-picker
+  type="datetime"
+  value="{{ currentDate }}"
+  min-date="{{ minDate }}"
+  max-date="{{ maxDate }}"
+  bind:input="onInput"
+/>
+</view>

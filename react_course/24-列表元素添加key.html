@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class App extends React.Component {
+        state = {
+          nums: [10, 20, 30, 40],
+        };
+        render() {
+          return (
+            <div>
+              {this.state.nums.map((num, i) => (
+                <p key={i}>{num}</p>
+              ))}
+              <hr />
+              {this.state.nums.map((num, i) => (
+                <div key={i}>
+                  <p>
+                    <span>{num}</span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+
+      /*
+      key属性注意事项：
+      1. 一个数组循环范围内，key属性的值保证唯一性。
+      2. 这个key属性必须加在map()循环的第一个子元素上，设置嵌套的深层元素上无效。
+      */
+    </script>
+  </body>
+</html>

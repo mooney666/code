@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>注册页面</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <form id="login">
+      <div>账号：<input type="text" name="username" /></div>
+      <div>密码：<input type="password" name="password" /></div>
+      <span class="err"></span>
+      <button>登录</button>
+    </form>
+    <script>
+      $("#login").submit((e) => {
+        e.preventDefault();
+        $.post("/login", $("#login").serialize(), (data) => {
+          if (data.status) {
+            // localStorage.setItem("login_status", "true");
+            localStorage.setItem("nickname", data.nickname);
+            location.href = "./index.html";
+          } else {
+            $(".err").text(data.msg);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+.Roles .subs {
+  display: flex;
+  margin-bottom: 20px;
+}
+.Roles .subs > div:first-child {
+  margin-right: 40px;
+  flex-shrink: 0;
+}
+.Roles .subs > div:first-child > span:nth-child(2) {
+  margin-left: -10px;
+}
+.Roles .rights .subs .subs > div {
+  display: flex;
+  align-items: center;
+}
+.Roles .rights > div > .subs {
+  border-bottom: 1px solid lightblue;
+}
+.Roles .ant-tag {
+  height: 25px;
+}
+.Roles .btns button {
+  margin-right: 20px;
+}

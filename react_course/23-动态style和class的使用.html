@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+    <style>
+      .btns {
+        display: flex;
+        align-items: center;
+        background-color: lightblue;
+      }
+      .btns > div {
+        width: 100px;
+        height: 40px;
+        border-radius: 10px;
+        text-align: center;
+        line-height: 40px;
+        cursor: pointer;
+      }
+      .active {
+        background-color: blue;
+        color: yellow;
+        border-bottom: 2px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      /*
+      动态组件：
+      什么是动态组件？(根据数据的变化而切换不同的组件，从而展示不同的内容。)
+      什么场景用？(当你发现点击不同的tab页，切换到不同的内容信息(标签结构)时，就可以使用动态组件。当你发现点击不同的tab页，切换到相同的内容信息(标签结构)时，公用一个组件即可。)
+      动态style和class:
+      根据数据的变化动态修改style样式，或者动态修改class类名，从而实现样式的动态变化。
+      div.style.color = ""
+      div.style.margin = ""
+      div.style.border = ""
+      div.style.color = ""
+      div.style.color = ""
+      div.style.color = ""
+      div.classlist.add("active")
+      */
+      class App extends React.Component {
+        state = {
+          color: "",
+          fontSize: 12,
+          type: "all",
+        };
+        changeStyle = () => {
+          this.setState({
+            color: "blue",
+            fontSize: 20,
+          });
+        };
+        getPStyle = () => {
+          const { color, fontSize } = this.state;
+          return {
+            color: color,
+            fontSize: fontSize + "px",
+            backgroundColor: "yellow",
+            width: fontSize * 10 + "px",
+          };
+        };
+        btnsClick(type) {
+          this.setState({ type });
+        }
+        render() {
+          const { color, fontSize, type } = this.state;
+          return (
+            <div>
+              {/*动态style方式一：style中直接设置对象，写CSS样式；这种写法等价于html中行内样式的做法，适合少量样式编写；*/}
+              <p style={{ color: color, fontSize: fontSize + "px" }}>段落</p>
+              {/*动态style方式一：style属性中设置函数调用，函数内部返回样式对象，本质上和上一种方式一样，都是设置行内样式。将样式对象单独封装了。*/}
+              <p style={this.getPStyle()}>段落</p>
+              <button onClick={this.changeStyle.bind(this)}>动态style</button>
+              <hr />
+              <div className="btns">
+                <div
+                  className={type === "all" ? "active" : ""}
+                  onClick={() => this.btnsClick("all")}
+                >
+                  全部
+                </div>
+                <div
+                  className={type === "rec" ? "active" : ""}
+                  onClick={() => this.btnsClick("rec")}
+                >
+                  推荐
+                </div>
+                <div
+                  className={type === "hot" ? "active" : ""}
+                  onClick={() => this.btnsClick("hot")}
+                >
+                  热门
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

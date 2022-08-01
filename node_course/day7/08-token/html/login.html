@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1></h1>
+    <form id="login">
+      <button class="login">登录</button>
+    </form>
+    <script>
+      let btn = document.querySelector(".login");
+      btn.onclick = (e) => {
+        e.preventDefault();
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+          if (xhr.status == 200 && xhr.readyState == 4) {
+            const res = JSON.parse(xhr.responseText);
+            localStorage.setItem("token", res.token);
+            let h1 = document.querySelector("h1");
+            h1.innerText = res.nickname;
+          }
+        };
+        xhr.open("POST", "http://localhost:8000/noauth/login");
+        xhr.setRequestHeader(
+          "content-type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(`username=123&password=123`);
+      };
+    </script>
+  </body>
+</html>

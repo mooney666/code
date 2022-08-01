@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input id="search" type="text" placeholder="输入搜索内容" />
+    <script>
+      let search = document.getElementById("search");
+      search.oninput = throttle(e => {
+        // 执行的搜索行为
+        console.log("搜索： ", e.target.value);
+      }, 1000);
+
+      // 封装节流函数：通过闭包实现。
+      // 两个参数：1.原本要执行的事件；2.设定时间。
+      function throttle(func, timer) {
+        // 记录开始时间
+        let beginTime = Date.now();
+        console.log("---", beginTime);
+        return e => {
+          // 这个返回的函数，最终绑定给了search.oninput事件了。
+          // 随着用户的输入，这个返回的函数不断的被调用，此时可以获取最新的时间戳。
+          let nowTime = Date.now();
+          if (nowTime - beginTime > timer) {
+            func(e);
+            beginTime = nowTime; // 更新起始时间，否则nowTime - beginTime > timer这个条件一直成立。
+          }
+        };
+      }
+    </script>
+  </body>
+</html>

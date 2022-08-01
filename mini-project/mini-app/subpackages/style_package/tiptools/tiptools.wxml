@@ -1,0 +1,5 @@
+<view>
+  <!-- <button bindtap="showToastEvent">showToast</button> -->
+  <!-- 下拉刷新最新数据 -->
+  <view class="item" wx:for="{{goods}}" wx:key="index">{{item.storeName}}</view>
+</view>

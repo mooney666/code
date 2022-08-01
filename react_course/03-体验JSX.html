@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/react@18.1.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18.1.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <!-- type="text/babel" 告诉浏览器这里的js需要使用babel包进行编译. -->
+    <script type="text/babel">
+      // 什么是JSX?
+      // 是JavaScript的一种扩展，JSX 可以生成 React “元素”，可以更加简洁的构建 UI 结构。
+
+      // JSX的特点?
+      // 1. 本质上，它只是 React.createElement(component, props, ...children) 函数的语法糖，写代码更加方便快捷。
+      // 2. JSX所描述的代码结构，最终还是会被编译成React.createElement(component, props, ...children)的形式.
+      // 3. 因为 JSX 语法上更接近 JavaScript 而不是 HTML，所以 React DOM 使用 camelCase（小驼峰命名）来定义属性的名称，而不使用 HTML 属性名称的命名约定。
+
+      // 总结: 这种以 "标签" 的形式构建DOM的形式称为声明式语法．需要什么DOM，只需要声明就行了，创建的事(React.createElement)交给了React完成.
+      $.ajax({
+        url: "https://www.lanqb.com/api/course/video/indexv3?type=2&page=2&limit=20",
+        success: function (data) {
+          let div = (
+            <div className="container">
+              <p>
+                段落<span>行标签</span>
+              </p>
+              <span></span>
+            </div>
+          );
+          let root = ReactDOM.createRoot(document.getElementById("main"));
+          root.render(div);
+        },
+      });
+    </script>
+  </body>
+</html>

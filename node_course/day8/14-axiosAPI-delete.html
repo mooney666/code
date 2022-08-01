@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script src="./axios.js"></script>
+    <script>
+      // delete请求和get请求用于一样。
+      // 1. delete 请求 url 传参
+      axios
+        .delete("http://127.0.0.1:8080/delete2?id=123&hero=coco")
+        .then((result) => {
+          // 1. 返回的是一个对象
+          console.log(result);
+          // 2. data 属性是响应结果
+          console.log(result.data);
+        });
+
+      // 2. delete 请求 params 选项传递参数
+      axios
+        .delete("http://127.0.0.1:8080/delete2", {
+          params: {
+            id: 566,
+            hero: "vs",
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          console.log(result.data);
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      /* 
+        fetch
+            1. 更加简单的数据获取方式，功能更加强大、更灵活，xhr 的升级版
+            2. 基础 Promise 
+            3. 是JS内置的发送ajax的工具
+      */
+      let f = fetch("http://localhost:8080/test1");
+      // console.log(f); // Promise 对象
+      f.then((response) => {
+        // console.log(response.json()); // response.json() 它返回的也是Promise对象。
+        // return response.json(); // json() 从响应对象中读取数据并转化为JSON对象。
+        return response.text(); // text() 从响应对象中读取数据并转化为JSON字符串。
+      }).then((data) => {
+        console.log(data);
+      });
+
+      // fetch 需要连续调用两个 .then() 才能获取数据。
+      // 第一个.then提供的是响应对象，fetch是考虑到编程人员可能需要操作响应对象。
+    </script>
+  </body>
+</html>

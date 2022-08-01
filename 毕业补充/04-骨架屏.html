@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./src/react18.development.js"></script>
+    <script src="./src/react-dom18.development.js"></script>
+    <script src="./src/babel.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .content {
+        text-align: center;
+      }
+      .header_img {
+        border-radius: 50%;
+        width: 100px;
+      }
+      p {
+        margin: 10px 0;
+      }
+      .hold_header_img {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        background-color: lightblue;
+        animation: active 0.5s infinite;
+      }
+      .hold_nickname,
+      .hold_desc {
+        height: 30px;
+        background-color: lightblue;
+        border-radius: 5px;
+        margin: 10px 0;
+        animation: active 0.5s infinite;
+      }
+      @keyframes active {
+        0% {
+          background-color: lightblue;
+        }
+        0% {
+          background-color: #999;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      // 骨架屏：一般在项目首次进入时，比如首页会出现骨架屏的效果，主要是为了缓解首次加载页面较慢的情况，给用户好的体验，在一定时间内不至于让用户一直处于等待的状况。
+      // 实现方案：
+      // 1. 让UI直接根据首页页面的布局，制作一个类似的骨架图片，图片只需按照页面布局简要描述结构即可。别让用户一直看到大白屏。
+      // 2. 使用第三方组件库，比如vant，antd，小程序等都提供了骨架屏组件。除了提供一些基本的骨架屏效果，还支持自定义布局。
+      // 3. 如果第三方组件库满足不了需求的话，只能自己根据首页页面的样式，写一套布局，只写占位符样式，然后将这个骨架单独制作一个组件，利用条件渲染对数据页面和骨架页面进行切换。
+
+      // 注意：
+      // 1. 任何形式的骨架屏，都是不能滚动的，因此后面的滚动内容不需要考虑。
+      // 2. 一般只针对首页(项目首次加载)。也可能部分页面也有，但不会所有页面都制作骨架屏，成本太高。
+      // 3. 对于其它页面，可能网络请求也比较慢，就不需要再花费大量时间制作骨架屏，用一个Loading提示用户正在加载即可。
+      function HolderPage() {
+        return (
+          <div className="content">
+            <img className="hold_header_img" />
+            <p className="hold_nickname"></p>
+            <p className="hold_desc"></p>
+          </div>
+        );
+      }
+      class User extends React.Component {
+        state = {
+          user: null,
+        };
+        render() {
+          const { user } = this.state;
+          return (
+            <div className="users">
+              {!user ? (
+                <HolderPage></HolderPage>
+              ) : (
+                <div className="content">
+                  <img className="header_img" src={user.img} alt="" />
+                  <p className="nickname">昵称:{user.nickname}</p>
+                  <p className="desc">简介:{user.desc}</p>
+                </div>
+              )}
+            </div>
+          );
+        }
+        componentDidMount() {
+          setTimeout(() => {
+            this.setState({
+              user: {
+                img: "https://img0.baidu.com/it/u=1694074520,2517635995&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+                nickname: "小红",
+                desc: "我是一个工人，每天都在工地上班。",
+              },
+            });
+          }, 5000);
+        }
+      }
+      let root = ReactDOM.createRoot(document.getElementById("app"));
+      root.render(<User />);
+    </script>
+  </body>
+</html>

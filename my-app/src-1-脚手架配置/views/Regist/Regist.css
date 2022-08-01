@@ -1,0 +1,45 @@
+.commonsize {
+  font-size: 15px;
+  color: red;
+}
+.Regist > h3 {
+  font-size: 15px;
+  color: red;
+  border: 1px solid red;
+}
+.Regist > h3 + span {
+  color: blue;
+  font-weight: bolder;
+}
+.Regist > h3 ~ a {
+  background-color: lightblue;
+}
+.Regist > p {
+  font-size: 15px;
+  color: red;
+  background-color: blue;
+}
+.Regist > a {
+  font-size: 15px;
+  color: red;
+}
+.Regist span {
+  font-size: 15px;
+  color: red;
+}
+.Regist .selector_mixin {
+  border: 1px solid red;
+}
+.Regist .selector_mixin .ss {
+  color: yellow;
+  font-size: 25px;
+}
+.Regist .selector > p:hover {
+  background-color: orange;
+}
+.Regist .selector > p:nth-child(1) {
+  color: blue;
+}
+.Regist .selector > p:nth-child(2) {
+  color: yellow;
+}

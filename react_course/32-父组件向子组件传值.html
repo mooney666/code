@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      function SonCom(props) {
+        return (
+          <div className="son-com">
+            <h3>
+              {console.log("组件1被渲染了")}
+              子组件1: {props.fname} - {props.fsex ? "男" : "女"}
+            </h3>
+          </div>
+        );
+      }
+      function Son1Com(props) {
+        return (
+          <div className="son-com">
+            {console.log("组件2被渲染了")}
+            <h3>子组件2: {props.fname}</h3>
+          </div>
+        );
+      }
+      class ParentCom extends React.Component {
+        state = {
+          pname: "小明",
+          psex: true,
+        };
+        render() {
+          let { pname, psex } = this.state;
+          return (
+            <div className="parent-com">
+              <h3>父组件</h3>
+              <p>
+                {pname}, {psex ? "男" : "女"}
+              </p>
+              <button
+                onClick={() =>
+                  this.setState({
+                    pname: "小红",
+                    psex: false,
+                  })
+                }
+              >
+                修改
+              </button>
+              <hr />
+              {/*两个子组件*/}
+              <SonCom fname={pname} fsex={psex}></SonCom>
+              <Son1Com fname={pname}></Son1Com>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<ParentCom />, document.getElementById("app"));
+
+      /*
+      父组件向子组件传值：
+      1. 父组件通过prop属性向子组件传值，这个prop属性设置在子组件的开始标签内部。子组件通过props形参或者this.props属性获取传值。
+      2. 当父组件的数据发生变化时(调用setState)，父组件会触发render()，此时子组件也会被重新编译生成新的虚拟DOM，同时最新的数据也传给子组件了，子组件的数据也会随之更新。
+      */
+    </script>
+  </body>
+</html>

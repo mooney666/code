@@ -1,0 +1,91 @@
+// 1. less使用变量
+@fontSize: 15px;
+
+// 2. 运算
+// 2.1 加减法运算，在运算之前先进行单位的转换，转换成统一单位，然后再运算，运算的结果以最左侧单位为准。比如: 2cm+10mm =3cm;
+// 2.2 乘除法运算，直接用数字乘除，不转换单位了，最终结果以左侧单位为准。比如: 2cm*3mm=6cm;
+// 2.3 无效的转换：2 + 5px - 3cm; // 结果是 4px cm无法转化为px，因此直接拿数字进行运算，最终结果以左侧单位为准。
+
+// 3. 混入Mixin
+// 3.1 没有返回值的混入: 就是将公共的样式单独封装起来。
+.commonsize {
+  font-size: @fontSize;
+  color: red;
+}
+// 3.2 选择器混入：某些标签选择器相同样式也相同，将选择器和样式一快封装。
+.spanbase() {
+  .ss {
+    color: yellow;
+    font-size: 25px;
+  }
+}
+// 3.3 命名空间(模块)混入：可以同时封装多个公共选择器样式，成为一个模块了，需要什么选择器就打点调用。
+// #spancommon() 必须以#开头
+#spancommon() {
+  .bgc {
+    // .bgc不再是类名了，而是你自己设置的样式模块名称
+    background-color: blue;
+  }
+  .border {
+    // .border不再是类名了，而是你自己设置的样式模块名称
+    border: 1px solid red;
+  }
+}
+
+.Regist {
+  > h3 {
+    // > 父子选择器
+    // font-size: @fontSize + 15;
+    .commonsize();
+    #spancommon > .border();
+  }
+  > h3 + span {
+    // + 紧跟的兄弟元素
+    color: blue;
+    font-weight: bolder;
+  }
+  > h3 ~ a {
+    // ~ 排在后面的兄弟元素
+    background-color: lightblue;
+  }
+  > p {
+    // font-size: @fontSize;
+    .commonsize();
+    #spancommon.bgc();
+  }
+  > a {
+    // font-size: @fontSize;
+    .commonsize();
+  }
+  span {
+    // 没有 > 会被编译成后代选择器
+    // font-size: @fontSize;
+    .commonsize();
+  }
+  .selector_mixin {
+    .spanbase();
+    #spancommon .border();
+  }
+  // .selector {
+  //   > p:nth-child(1) {
+  //     font-size: 30px;
+  //   }
+  //   > p:nth-child(2) {
+  //     font-size: 20px;
+  //   }
+  // }
+  .selector {
+    > p {
+      // & 通常用在伪类选择器上，代表元素自身。
+      &:hover {
+        background-color: orange;
+      }
+      &:nth-child(1) {
+        color: blue;
+      }
+      &:nth-child(2) {
+        color: yellow;
+      }
+    }
+  }
+}

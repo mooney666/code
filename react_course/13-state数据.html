@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script type="text/babel">
+      // state: 通过this.state访问类组件的私有数据, 这个state仅限当前类组件访问, 其他组件不能访问另外一个类组件的state, 如果一个组件需要访问另外一个组件的数据, 只能通过props传值.
+
+      class Root extends React.Component {
+        constructor() {
+          super(); // super()必须调用, 否则报错
+          // 在 constructor 构造器中, 声明组件私有数据, 一般都是初始值, 后续会动态变化.
+          // state和props的区别
+          this.state = {
+            timetemp: Date.now(), // 时间戳
+            uname: "未知",
+          };
+        }
+        render() {
+          console.log("渲染了");
+          // console.log(this);
+          let { timetemp, uname } = this.state;
+          return (
+            <div className="root">
+              <h4>Root组件</h4>
+              <p>
+                时间戳:{timetemp}, 姓名:{uname}
+              </p>
+              <button onClick={() => this.changeData("小王")}>setName</button>
+            </div>
+          );
+        }
+        changeData(name) {
+          // console.log("点击了");
+
+          // 注意:React修改数据,一定使用setState, 页面会自动根据最新的state进行重新渲染.
+          this.setState({
+            uname: name,
+            timetemp: Date.now(),
+          });
+
+          // this.state.uname = "小张"; // 数据更新了, 页面不会渲染, 因此React中不会这样去修改数据.
+          // console.log(this.state);
+        }
+      }
+      ReactDOM.render(<Root />, document.getElementById("main"));
+    </script>
+  </body>
+</html>

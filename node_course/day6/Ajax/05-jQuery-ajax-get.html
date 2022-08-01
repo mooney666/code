@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div id="div">暂无数据</div>
+    <button>获取数据</button>
+    <script>
+      // 1. $.get() 只能发get请求，注意这种方式无法设置请求头
+      //   $.get(
+      //     "http://localhost:8080/user?keyword=小&page=1",
+      //     (data, status, xhr) => {
+      //       console.log(data);
+      //       console.log(status);
+      //       console.log(xhr);
+      //     }
+      //   );
+
+      $("button").click(() => {
+        // 2. $.ajax() 通用请求，任何请求都可以通过它发送，并且可以对请求进行各项配置，使用较灵活。
+        //#region ajax GET请求方式一：拼接url参数
+        // $.ajax({
+        //   url: "http://localhost:8080/user?keyword=小&page=1",
+        //   method: "GET",
+        //   success: function (data) {
+        //     console.log("成功: ", typeof data);
+        //     $("#div").text(JSON.stringify(data));
+        //   },
+        //   error: function (err) {
+        //     console.log("失败: ", err);
+        //   },
+        //   complete: function () {
+        //     console.log(
+        //       "请求完成了，不管成功还是失败，都算完成，因此该方法都会执行"
+        //     );
+        //   },
+        // });
+        //#endregion
+
+        //#region ajax GET请求方式二：设置data参数
+        $.ajax({
+          url: "http://localhost:8080/user",
+          method: "GET",
+          data: {
+            keyword: "关键字",
+            page: 1,
+            size: 10,
+          }, // GET请求，jquery默认会将data属性携带的参数，拼接到url的后面，最终：http://localhost:8080/user?keyword=关键字&page=1&size=10
+          success: function (data) {
+            console.log("成功: ", typeof data);
+            $("#div").text(JSON.stringify(data));
+          },
+          error: function (err) {
+            console.log("失败: ", err);
+          },
+          complete: function () {
+            console.log(
+              "请求完成了，不管成功还是失败，都算完成，因此该方法都会执行"
+            );
+          },
+        });
+        //#endregion
+      });
+    </script>
+  </body>
+</html>

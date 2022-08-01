@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      // 定义事件中心，让所有组件都能访问到事件中心。
+      let events = [];
+      let eventCenter = {
+        subscribe(func) {
+          events.push(func);
+        },
+        publish(data) {
+          events.forEach(event => event(data));
+        },
+      };
+
+      class App extends React.Component {
+        render() {
+          return (
+            <div className="app">
+              <One />
+              <hr />
+              <Two />
+              <hr />
+              <Three />
+            </div>
+          );
+        }
+      }
+      class One extends React.Component {
+        state = {
+          name: "小明",
+        };
+        sendData() {
+          eventCenter.publish(this.state.name);
+        }
+        render() {
+          return (
+            <div className="one">
+              <p>one组件: {this.state.name}</p>
+              <button onClick={() => this.sendData()}>发送</button>
+              <button
+                onClick={() => {
+                  this.setState(
+                    {
+                      name: Date.now(),
+                    },
+                    () => {
+                      eventCenter.publish(this.state.name);
+                    }
+                  );
+                }}
+              >
+                修改
+              </button>
+            </div>
+          );
+        }
+        componentDidMount() {
+          console.log("one渲染完毕");
+          eventCenter.publish(this.state.name);
+        }
+      }
+      class Two extends React.Component {
+        constructor() {
+          console.log("开始初始化two");
+          super();
+          this.state = {
+            recName: "",
+          };
+          eventCenter.subscribe(data => {
+            console.log("Two收到数据:", data);
+            this.setState({ recName: data });
+          });
+        }
+        render() {
+          return (
+            <div className="two">
+              <p>two组件</p>
+              <p>收到数据: {this.state.recName}</p>
+            </div>
+          );
+        }
+      }
+      class Three extends React.Component {
+        constructor() {
+          console.log("开始初始化three");
+          super();
+          this.state = {
+            recName: "",
+          };
+          eventCenter.subscribe(data => {
+            console.log("Three收到数据:", data);
+            this.setState({ recName: data });
+          });
+        }
+        render() {
+          return (
+            <div className="three">
+              <p>three组件</p>
+              <p>收到数据: {this.state.recName}</p>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

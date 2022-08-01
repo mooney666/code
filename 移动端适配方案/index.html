@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html {
+        /* font-size: 0.26666vw; */
+        font-size: 26.6666vw;
+      }
+      body {
+        font-size: 0.16rem;
+      }
+      .d {
+        width: 1rem;
+        height: 1rem;
+        background-color: lightblue;
+      }
+      .test {
+        width: 2.34rem;
+        height: 1.16rem;
+        background-color: lightblue;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 
+      以375px作为设计稿，设计稿里面的所有元素尺寸，字体大小，元素间距等等都是按照375px的标准给的，我们要做的就是保证设置的样式在375px尺寸下和设计稿中标注的尺寸一致即可。 
+      100vw = 375px; 1px = 0.26666vw;
+      100vw = 750px; 1px = 0.13333vw;
+    -->
+    <!-- 在375px尺寸下，要求div元素是100*100 -->
+    <div class="d">div</div>
+    <!-- 在375px尺寸下，要求div元素是234*116 -->
+    <div class="test">div</div>
+  </body>
+</html>

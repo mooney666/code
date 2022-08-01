@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <button id="get">GET测试</button><br />
+    <div id="lol"></div>
+    <script>
+      // 场景：
+      // 1. 先通过ajax调用接口，获取当前城市信息；
+      // 2. 根据城市名称，再发ajax调接口，获取城市天气；
+      // 3. 根据天气情况，再发ajax请求调接口，获取出行建议；
+      // 现象：这三个异步任务，必须得保证先后顺序。
+
+      // 这种并列写法，是无法实现上述场景的。无法保证结果的先后顺序。
+      // $.get("城市", (data) => {});
+      // $.get("天气", (data) => {});
+      // $.get("建议", (data) => {});
+
+      // 通过ajax的嵌套，保证先后顺序
+      // 这种层层嵌套形成的结构：称为回调地狱。代码维护性差，阅读性差；
+      $.get("城市", (data) => {
+        $.get("天气", (data) => {
+          $.get("建议", (data) => {});
+        });
+      });
+
+      // 通过Promise解决回调地狱问题。
+    </script>
+  </body>
+</html>

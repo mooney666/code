@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <form id="form1">
+      <div>账号：<input type="text" name="username" /></div>
+      <div>密码：<input type="password" name="password" /></div>
+      <button>登录</button>
+    </form>
+    <script>
+      $("#form1").submit((e) => {
+        e.preventDefault();
+        $.post("/login", $("#form1").serialize(), (data) => {
+          console.log("==", data);
+        });
+      });
+    </script>
+  </body>
+</html>

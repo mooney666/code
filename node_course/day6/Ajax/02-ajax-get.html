@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GET</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <script>
+    /*
+      Ajax : 
+          1. Asynchronous Javascript And XML（异步JavaScript和XML）, 。
+          2. what : 一种创建交互式网页的开发技术。
+          3. how : 刷新局部网页，而不是整个网页刷新的技术。
+          4. 核心 : 使用 JavaScript 向服务器提出请求并处理响应而不阻塞用户核心对象XMLHttpRequest。
+          5. 好处 : 快速响应客户端。
+      
+      核心原理：
+          传统的 web 开发，js 向服务器发起请求，等待服务器处理后，响应给浏览器。浏览器接收数据并渲染。  
+              此时，浏览器要等待服务器的响应后，才能发起新的请求。容易阻塞，用户体验不好。
+          ajax 开发，浏览器内部有一个 ajax  引擎(XMLHTTPRequest)。 
+              js 向 ajax 引擎发送数据。
+              ajax 引擎向服务器发送请求。服务器处理完请求向 ajax 引擎响应数据。  
+              引擎通过事件监听函数，接收到响应的数据，并渲染。
+              js 可以不必等待 ajax 引擎的响应，多次向 ajax 引擎发起请求。
+      
+      使用步骤见： https://www.w3school.com.cn/xml/xml_http.asp
+      */
+  </script>
+
+  <div id="dota">刀塔</div>
+
+  <script type="text/javascript">
+    // 原生ajax请求：XMLHttpRequest 这个内置的对象实现请求。
+
+    // 1. 实例化请求对象，考虑兼容问题
+    var httpAjax = null;
+    if (window.XMLHttpRequest) httpAjax = new XMLHttpRequest(); // 主流浏览器
+    else if (window.ActiveXObject) httpAjax = new ActiveXObject(); // IE5 IE6 浏览器
+
+    if (httpAjax) {
+      // 2. 绑定监听函数，监听请求状态的变化
+      httpAjax.onreadystatechange = () => {
+        // 根据请求状态，进行数据的处理
+        if (httpAjax.status == 200 && httpAjax.readyState == 4) {
+          console.log(httpAjax.responseText);
+        }
+      }
+      // 3. 进行请求配置
+      // open(method, url, async, username, password)
+      httpAjax.open("GET", "http://localhost:8080/user", true)
+
+      // 4. 发送请求
+      httpAjax.send();
+    }
+    
+  </script>
+</body>
+
+</html>

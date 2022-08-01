@@ -1,0 +1,55 @@
+{
+  "projectname": "mini-app",
+  "setting": {
+    "compileHotReLoad": true,
+    "urlCheck": false
+  },
+  "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "动画页面",
+          "pathName": "pages/animation/animation",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "类名样式",
+          "pathName": "pages/classstyle/classstyle",
+          "query": "",
+          "launchMode": "default",
+          "scene": null,
+          "partialCompile": {
+            "enabled": false,
+            "pages": [
+              "pages/index/index"
+            ]
+          }
+        },
+        {
+          "name": "各种提示框",
+          "pathName": "pages/tiptools/tiptools",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "image组件",
+          "pathName": "pages/image/image",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "歌曲播放列表",
+          "pathName": "pages/musics/music",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

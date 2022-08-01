@@ -1,0 +1,95 @@
+1. GET请求和POST请求的区别？(可以从用途、参数、安全性等方面描述)(10分)
+   a. GET请求用于获取数据；POST请求用于向服务器添加数据；
+   b. GET请求参数拼接在URL后面；POST请求参数放在请求体里面；
+   c. GET请求参数暴漏在URL上，不安全；POST请求参数没有直接暴漏而是放在请求体中，比          GET更加安全；
+
+2. 阐述MIME类型的作用。(5分)
+   它就是用来设置上传给服务器的数据类型content-type，方便服务器快速识别数据类型，从而找到正确的中间件来处理解析这些参数，得到正确的结果。因此，请求时传递给服务器的参数结构和content-type必须匹配才行。
+
+3. 原生ajax向后端接口发送POST请求时，前后端分别注意什么。(5分)
+   a. 如果携带参数是拼接字符串，那么前端应该设置请求头的Content-Type字段为application/x-www-form-urlencoded；后端应使用express.urlencoded()中间件进行解析参数；
+   b. 如果携带参数是JSON字符串，那么前端应该设置请求头的Content-Type字段为application/json；后端应使用express.json()中间件解析参数；
+
+4. jQuery向后端接口发送POST请求时，前后端分别注意什么。(5分)
+   a. 如果携带参数是拼接字符串，那么前端可以不设置请求头的Content-Type字段，因为jQuery默认处理参数的方式就是application/x-www-form-urlencoded；后端应使用express.urlencoded()中间件进行解析参数；
+   b. 如果携带参数是JSON字符串，那么jQuery应该设置请求头的Content-Type字段为application/json；后端应使用express.json()中间件解析参数；
+
+5. jQuery发送GET请求的两种代码写法，用代码写出来完整配置。(5分)
+   $.get(url, (data) => { });
+   $.ajax({
+      url: "",
+      method: "GET",
+      data: { },
+      contentType: { },
+      headers: { },
+      success: ( ) => { },
+      error: ( )=>{ },
+      complete: ( )=>{ }
+   })
+
+6. jQuery发送POST请求的两种代码写法，用代码写出来完整配置。(5分)
+   $.post(url, (data) => { });
+   $.ajax({
+      url: "",
+      method: "POST",
+      data: { },
+      contentType: { },
+      headers: { },
+      success: ( ) => { },
+      error: ( )=>{ },
+      complete: ( )=>{ }
+   })
+
+7. 跨域产生的原因是什么？浏览器为什么要阻止跨域？(5分)
+   a. 在进行跨站资源访问时，协议、端口、域名出现不一致的情况时，产生CORS跨域；
+   b. 阻止跨域是由于浏览器受到同源策略的影响，当两个URL资源协议、域名、端口不一致时，浏览器认为目标API的安全性无法保证，可能会对当前网站造成安全威胁，因此在对方服务器没有明确设置Access-Control-Allow-Origin的情况下，浏览器是不会接收服务器的响应的。
+
+8. cors包如何解决跨域，用代码写出详细步骤。(10分)
+   a. 安装npm  i  cors
+   b. const cors = require("cors")
+   c. app.use(cors())
+
+9. 代理服务器解决跨域的原理是什么？(10分)
+   代理服务器是介于前端和后端之间的中间服务层，前端向代理服务器发送请求时，代理服务器是允许跨域请求的，而代理服务器在收到前端的ajax请求时，会通过changeOrigin的方式，将前端请求的接口，转发给target所指向的目标服务器，从而以相同的域向目标服务器发送请求，由于代理服务器和目标服务器之间的域是相同的，因此不会出现跨域问题，从而代理服务器会收到目标服务器的响应，再将响应转发给前端即可。
+
+10. 代理服务器解决跨域的代码实现步骤。(10分) 单词过长可以写开头和结尾，中间省略即可。
+   const express = require("express");
+   const { createProxyMiddleware } = require("http-proxy-middleware");
+   const cors = require("cors");
+   const app = express();
+   app.use(cors());
+   app.use(
+      createProxyMiddleware({
+         target: "https://www.lanqb.com",
+         changeOrigin: true, // 切换源，域名，实现偷梁换柱。
+      })
+   );
+
+  app.listen(9000, () => {
+     console.log("代理服务已启动 9000");
+  });
+
+11. ajax请求的特点是什么？(可以从用途、网页表现、同步异步等方面描述，可以结合着form描述)(10分)
+   a. ajax用于主要用于向接口服务器发送请求，获取数据信息；
+   b. ajax是通过局部刷新网页的方式来请求网页数据的，不会刷新整个页面；而form请求会刷新整个页面；
+   c. ajax支持各种请求，GET/POST/PUT/DELETE；而form表单请求仅支持GET/POST；
+   d. ajax是支持同步和异步两种请求方式的，不会阻塞整个页面的加载速度；
+
+12. 列举JS中数组常用API，至少5个。(10分，1个2分)
+   .join()  .map()  .slice()  .splice()  .indexOf()  .findIndex()  .every()  .some()   
+
+13. 给定以下学员数组结构，实现姓名搜索功能，比如：输入张三，就把张三这个人的信息查询出来。(10分)
+let users = [
+   {age: 12, other: {name: 张三, sex: 男}},
+   {age: 22, other: {name: 李四, sex: 女}},
+   {age: 32, other: {name: 王五, sex: 男}},
+]
+
+a. 获取用户输入姓名
+let uname = $("input").val();
+b. 根据姓名去数组中查找该数据索引
+let idx = users.findIndex((obj) => {
+   return obj.other.name === uname
+})
+c. 根据索引从数组中取出信息
+let info = users[idx];

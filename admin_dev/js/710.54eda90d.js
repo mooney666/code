@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkweb_admin"]=self["webpackChunkweb_admin"]||[]).push([[710],{1710:function(e,n,t){t.r(n),t.d(n,{default:function(){return r}});var u=t(3396),a=t(65),c={setup(e){let n=(0,a.oR)();return n.commit("changeNavList",["订单管理","订单列表"]),(e,n)=>((0,u.wg)(),(0,u.iD)("h1",null,"订单列表"))}};const i=c;var r=i}}]);
+//# sourceMappingURL=710.54eda90d.js.map

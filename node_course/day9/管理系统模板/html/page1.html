@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/page1.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/layui@2.6.8/dist/css/layui.css"
+    />
+    <script src="https://unpkg.com/layui@2.6.8/dist/layui.js"></script>
+    <link rel="stylesheet" href="../css/common.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="page1-nav">
+      <div class="page1-nav-left">
+        <i class="layui-icon layui-icon-home"></i>
+        <span class="layui-breadcrumb" lay-separator="›">
+          <a href="#">主页</a>
+          <a href="#">个人办公</a>
+          <a href="#">流程审批</a>
+        </span>
+      </div>
+      <div class="page1-nav-right">
+        <button type="button" class="layui-btn layui-btn-xs">
+          <i class="layui-icon layui-icon-refresh layui-font-12"></i> 刷新
+        </button>
+        <button type="button" class="layui-btn layui-btn-xs">
+          <i class="layui-icon layui-icon-addition layui-font-12"></i> 新建流程
+        </button>
+      </div>
+    </div>
+    <div class="page1-search">
+      <div class="page1-search-left">
+        <button type="button" class="layui-btn layui-btn-sm">我发起的</button>
+        <button type="button" class="layui-btn layui-btn-sm other">
+          待办流程
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm other">
+          已办流程
+        </button>
+      </div>
+      <div class="page1-search-right">
+        <div class="layui-form-item">
+          <label class="layui-form-label">流程ID</label>
+          <div class="layui-input-inline">
+            <input
+              type="text"
+              name="id"
+              required
+              lay-verify="required"
+              autocomplete="off"
+              class="layui-input"
+            />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">流程名称</label>
+          <div class="layui-input-inline">
+            <input
+              type="text"
+              name="name"
+              required
+              lay-verify="required"
+              autocomplete="off"
+              class="layui-input"
+            />
+          </div>
+        </div>
+        <button
+          type="button"
+          class="layui-btn layui-btn-sm layui-border-black layui-btn-primary"
+        >
+          查询
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

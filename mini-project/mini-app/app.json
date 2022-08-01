@@ -1,0 +1,78 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/animation/animation",
+    "pages/cates/cates",
+    "pages/cart/cart",
+    "pages/center/center"
+  ],
+  "subpackages": [
+    {
+      "root": "subpackages/media_package",
+      "pages": [
+        "image/image",
+        "musics/music"
+      ]
+    }, {
+      "root": "subpackages/style_package",
+      "name": "detail",
+      "pages": [
+        "list/list",
+        "classstyle/classstyle",
+        "tiptools/tiptools"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["detail"]
+    }
+  },
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#00b26a",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": true,
+    "backgroundColor": "#4672a1"
+  },
+  "requiredBackgroundModes": ["audio", "location"],
+  "tabBar": {
+    "custom": true,
+    "borderStyle": "white",
+    "color": "#777777",
+    "selectedColor": "#00b26a",
+    "backgroundColor": "#e6e6e6",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "./static/tabbars/home.png",
+        "selectedIconPath": "./static/tabbars/home-selected.png"
+      },
+      {
+        "pagePath": "pages/cates/cates",
+        "text": "分类",
+        "iconPath": "./static/tabbars/cates.png",
+        "selectedIconPath": "./static/tabbars/cates-selected.png"
+      },
+      {
+        "pagePath": "pages/cart/cart",
+        "text": "购物车",
+        "iconPath": "./static/tabbars/cart.png",
+        "selectedIconPath": "./static/tabbars/cart-selected.png"
+      },
+      {
+        "pagePath": "pages/center/center",
+        "text": "我的",
+        "iconPath": "./static/tabbars/center.png",
+        "selectedIconPath": "./static/tabbars/center-selected.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index"
+  }
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 准备事件中心：它主要负责协调发布者和订阅者。它内部主要是存储订阅者注册的各种事件，而发布者则会通过事件中心调用这些事件，从而让订阅者收到消息。
+      let events = []; // 存储订阅者事件的数组
+      let eventsCenter = {
+        subscribe(func) {
+          events.push(func);
+        }, // subscribe 它是让订阅者注册事件的方法。
+        publish(info) {
+          // info 就是发布者提供的信息
+          events.forEach(event => event(info));
+        }, // publish 让发布者调用的。
+      };
+
+      // 2. 创建订阅者：订阅者一定先往事件中心注册事件，然后再发布。
+      eventsCenter.subscribe(data => {
+        console.log("订阅者1", data);
+      });
+      eventsCenter.subscribe(data => {
+        console.log("订阅者2", data);
+      });
+      eventsCenter.subscribe(data => {
+        console.log("订阅者3", data);
+      });
+
+      // 3. 发布消息
+      eventsCenter.publish("下课了");
+    </script>
+  </body>
+</html>

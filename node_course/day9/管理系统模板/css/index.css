@@ -1,0 +1,84 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+.nav-slider {
+  width: 200px;
+  height: 100vh;
+  background-color: lightblue;
+}
+.nav-slider > h3 {
+  height: 50px;
+  background-color: #224b8f;
+  text-align: center;
+  line-height: 50px;
+  color: white;
+  font-weight: normal;
+  font-size: 17px;
+}
+.nav-slider > ul {
+  height: calc(100% - 50px);
+  overflow-y: scroll;
+}
+.nav-slider > ul > li dd a {
+  padding-left: 35px !important;
+}
+.nav-slider > .test::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 5px;
+  height: 100px;
+  background-color: #2a354e;
+}
+.nav-slider > .test::-webkit-scrollbar-thumb {
+  /*滚动条整体样式*/
+  background-color: #2a354e;
+}
+.nav-slider > .test::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  background: lightblue;
+}
+.right-content {
+  width: calc(100% - 200px);
+  height: 100vh;
+  background-color: lightcoral;
+}
+.right-content > .content-nav {
+  height: 50px;
+  background-color: #2a5caa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.right-content > .content-nav > .menu i {
+  font-size: 20px;
+  color: white;
+  font-weight: bolder;
+  padding-left: 20px;
+}
+.right-content > .content-nav > .userinfo a {
+  color: white;
+  margin-right: 10px;
+}
+.right-content > .content-main {
+  height: calc(100% - 50px);
+  box-sizing: border-box;
+  padding: 0 10px;
+  background-color: white;
+  position: relative;
+}
+.right-content > .content-main > #iframe {
+  width: 100%;
+  height: 100%;
+}
+.right-content > .content-main > #mask {
+  width: 100%;
+  height: 100%;
+  background-color: #79797d;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  opacity: 0.6;
+  display: none;
+}

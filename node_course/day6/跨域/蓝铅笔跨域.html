@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .main {
+        width: 1000px;
+        margin: 0 auto;
+        background-color: lightblue;
+      }
+      .main > div {
+        width: 280px;
+        height: 390px;
+      }
+      .i_img {
+        width: 100%;
+        height: 160px;
+        background-size: 100% 100%;
+        background-position: center;
+      }
+      .t_img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main"></div>
+    <script>
+      const map_types = {
+        3: "大咖班",
+        4: "专题班",
+        2: "特训班",
+        1: "专业班",
+      };
+      $.get(
+        "http://localhost:9000/school/professional?status=show&limit=20&page=1&course_style_ids=&weight=desc",
+        (res) => {
+          const { data } = res;
+          console.log(data);
+          data.forEach((s_obj, i) => {
+            // 处理课程Logo
+            const img_url = "https://ss.lanqb.com/" + s_obj.posters.web;
+
+            // 处理作者信息: 超过3个只展示3个，不超过3个则全部展示
+            let teacher_info = ""
+            let t_lists = s_obj.major_teacher_list;
+            t_lists = t_lists.length > 3 ? t_lists.slice(0, 3) : t_lists;
+            t_lists.forEach((teacher) => {
+              teacher_info += `<div><img class="t_img" src="${'https://ss.lanqb.com/'+teacher.avatar}"><span>${teacher.nickname}</span></div>`
+            });
+
+            $(
+              `<div class="item"><div class="i_img" style="background-image: url(${img_url})"></div><div><span>${
+                map_types[s_obj.pro_course_type]
+              }</span><span>${s_obj.title}</span></div>${teacher_info}<div><span>学习周期:${s_obj.period}个月</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>${s_obj.statistic.advisory} 人感兴趣</span></div><div>就业方向：${s_obj.job_tags.join(" ")}</div></div>`
+            ).appendTo($(".main"));
+          });
+        }
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="location"></div>
+    <ul class="area"></ul>
+    <div class="main">
+      <div class="weather"></div>
+      <div class="suggest"></div>
+    </div>
+    <script>
+      let adcode;
+      let cityname;
+      function ajax(url, method = "GET", params = {}) {
+        return new Promise((resolve, reject) => {
+          let paramsOpt = {};
+          if (method == "GET") paramsOpt["method"] = method;
+          else {
+            paramsOpt["method"] = method;
+            paramsOpt["body"] =
+              typeof params == "string" ? params : JSON.stringify(params);
+            paramsOpt["headers"] = {
+              "Content-Type":
+                typeof params == "string"
+                  ? "application/x-www-form-urlencoded"
+                  : "application/json",
+            };
+          }
+          fetch(url, paramsOpt)
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        });
+      }
+      // 1. 根据IP自动定位，获取位置信息
+      ajax(
+        "http://localhost:9000/location/ip?ak=DmWWImbDOmBknBNrR3SSw7nwseS11Fkr&coor=bd09ll"
+      )
+        .then((location) => {
+          // console.log(location);
+          adcode = location.content.address_detail.adcode;
+          cityname = location.content.address_detail.city;
+          $(`<h4>当前定位城市:${location.content.address}</h4>`).appendTo(
+            $(".location")
+          );
+          const province = location.content.address_detail.province;
+          return ajax(
+            `http://localhost:9000/api_region_search/v1/?keyword=${province}&sub_admin=1&ak=DmWWImbDOmBknBNrR3SSw7nwseS11Fkr`
+          );
+        })
+        .then((area) => {
+          // console.log(area);
+          const cityList = area.districts[0].districts;
+          cityList.forEach((obj) => {
+            $(".area").append($(`<li>${obj.name}</li>`));
+          });
+          // 同时获取天气信息和周边检索信息
+          let weatherPromise = ajax(
+            `http://localhost:9000/weather/v1/?district_id=${adcode}&data_type=all&ak=DmWWImbDOmBknBNrR3SSw7nwseS11Fkr`
+          );
+          let poiPromise = ajax(
+            `http://localhost:9000/place/v2/search?query=ATM机&tag=银行&region=${cityname}&output=json&ak=DmWWImbDOmBknBNrR3SSw7nwseS11Fkr`
+          );
+          Promise.all([weatherPromise, poiPromise]).then((res) => {
+            console.log(res);
+          });
+        });
+    </script>
+  </body>
+</html>

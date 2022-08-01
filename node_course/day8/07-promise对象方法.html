@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      /* 
+        面试中常问：
+        对象方法
+            Promise.all():  并发处理多个异步任务，多个任务之间没有先后顺序，所有任务都执行完成，才能得到结果调用.then()；
+            Promise.race(): 并发处理多个异步任务，任何一个任务执行完成，就能得到结果，执行.then()；
+        语法：
+            Promise.all([p1, p2, p3]).then((result) => {
+              console.log(result);
+            });    
+      */
+      function ajaxTool(url, method, params) {
+        return new Promise((resolve, reject) => {
+          $.ajax({
+            url,
+            method,
+            data: { ...params },
+            success: (data) => {
+              resolve(data);
+            },
+          });
+        });
+      }
+
+      let p1 = ajaxTool("http://localhost:8080/test1");
+      let p2 = ajaxTool("http://localhost:8080/test2");
+      let p3 = ajaxTool("http://localhost:8080/test3");
+      Promise.all([p1, p2, p3]).then((res) => {
+        console.log("all = ", res); // 三个异步任务的结果，都保存到res这个数组中。
+      });
+      // all() 使用场景：一个接口的参数，是由另外几个接口返回的。这几个接口必须都取得结果，然后作为参数，最终向目标接口发请求。
+
+      // -------------------------------------------
+
+      Promise.race([p1, p2, p3]).then((res) => {
+        console.log("race = ", res);
+      });
+      // race() 使用场景：比如为了提升用户体验，不同的服务器可能会部署相同的接口，请求时同时向这三个服务器接口发送请求，看哪个响应的快。
+    </script>
+  </body>
+</html>

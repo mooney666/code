@@ -1,0 +1,43 @@
+.tabbar {
+  z-index: 1000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  width: 100vw;
+  background: #e6e6e6;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+}
+.tabbar .tabbar-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.tabbar-item view {
+  text-align: center;
+}
+.tabbar .icon {
+  width: 60rpx;
+  height: 60rpx;
+}
+.tabbar .title {
+  font-size: 24rpx;
+}
+.add {
+  width: 100rpx;
+  height: 100rpx;
+  background-color: red;
+  text-align: center;
+  line-height: 100rpx;
+  font-size: 80rpx;
+  font-weight: bolder;
+  position: absolute;
+  top: -40rpx;
+  left: calc(50% - 50rpx);
+  color: white;
+  border-radius: 50%;
+}

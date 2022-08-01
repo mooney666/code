@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./react18.development.js"></script>
+    <script src="./react-dom18.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class Root extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            num: 1,
+            page: 1,
+          };
+        }
+        react_17 = () => {
+          let { num, page } = this.state;
+
+          // this.setState({
+          //   num: num + 1,
+          // });
+          // this.setState({
+          //   page: page + 1,
+          // });
+
+          setTimeout(() => {
+            this.setState({
+              num: num + 1,
+            });
+            this.setState({
+              page: page + 1,
+            });
+          }, 1000);
+        };
+        react_18 = () => {
+          let { num, page } = this.state;
+
+          // this.setState({
+          //   num: num + 1,
+          // });
+          // this.setState({
+          //   page: page + 1,
+          // });
+
+          setTimeout(() => {
+            this.setState({
+              num: num + 1,
+            });
+            this.setState({
+              page: page + 1,
+            });
+          }, 1000);
+        };
+        render() {
+          console.log("render()");
+          return (
+            <div className="root">
+              <button onClick={this.react_17}>react v17 click</button>
+              <button onClick={this.react_18}>react v18 click</button>
+              <hr />
+              <div>
+                num:{this.state.num}, page:{this.state.page}
+              </div>
+            </div>
+          );
+        }
+      }
+      // ReactDOM.render(<Root />, document.getElementById("app"));
+
+      let root = ReactDOM.createRoot(document.getElementById("app"));
+      root.render(<Root />);
+
+      /*
+      setState() 在React17和React18中的对比：
+      1. 该方法并不总是异步更新；(18版本没有变化)；在React控制事件中是异步，原生事件中是同步；
+      2. 该方法的几种语法用法没有发生变化，仍然分为几种情况：获取最新数据和普通更新数据；
+      3. (新特性)在setTimeout等原生事件中，如果连续的调用this.setState()更新数据，React17是没有批量更新数据的，而是连续触发render()多次；React18中进行了优化，在原生事件中连续多次调用this.setState()也会自动批量更新数据，最终只render()一次。
+      */
+    </script>
+  </body>
+</html>

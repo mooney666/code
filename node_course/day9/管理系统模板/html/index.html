@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 引入 layui.css -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/layui@2.6.8/dist/css/layui.css"
+    />
+    <!-- 引入 layui.js -->
+    <script src="https://unpkg.com/layui@2.6.8/dist/layui.js"></script>
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <title>首页</title>
+  </head>
+  <body>
+    <!-- #region 左侧导航 -->
+    <div class="nav-slider">
+      <h3>珠宝首饰销售管理系统</h3>
+      <ul
+        class="layui-nav layui-nav-tree test"
+        lay-bar="disabled"
+        lay-filter="nav-menu"
+        lay-shrink="all"
+      >
+        <li class="layui-nav-item layui-nav-itemed">
+          <a href="javascript:;">个人办公</a>
+          <dl class="layui-nav-child layui-nav-child-r">
+            <dd lay-unselect>
+              <a href="javascript:;" data-index="0">流程审批</a>
+            </dd>
+            <dd lay-unselect>
+              <a href="javascript:;" data-index="1">流程设置</a>
+            </dd>
+            <dd lay-unselect>
+              <a href="javascript:;" data-index="2">我的邮件</a>
+            </dd>
+            <dd lay-unselect>
+              <a href="javascript:;" data-index="3">我的日程</a>
+            </dd>
+            <dd lay-unselect>
+              <a href="javascript:;" data-index="4">我的计划</a>
+            </dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">基本信息</a>
+          <dl class="layui-nav-child">
+            <dd lay-unselect><a href="javascript:;">职员信息</a></dd>
+            <dd lay-unselect><a href="javascript:;">产品信息</a></dd>
+            <dd lay-unselect><a href="javascript:;">客户信息</a></dd>
+            <dd lay-unselect><a href="javascript:;">供应商信息</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">采购进货</a>
+          <dl class="layui-nav-child">
+            <dd lay-unselect><a href="javascript:;">进货登记</a></dd>
+            <dd lay-unselect><a href="javascript:;">退货登记</a></dd>
+            <dd lay-unselect><a href="javascript:;">付款登记</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">预定管理</a>
+          <dl class="layui-nav-child">
+            <dd lay-unselect><a href="javascript:;">预定</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">产品销售</a>
+          <dl class="layui-nav-child">
+            <dd lay-unselect><a href="javascript:;">产品销售</a></dd>
+            <dd lay-unselect><a href="javascript:;">产品退货</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">库存管理</a>
+          <dl class="layui-nav-child">
+            <dd lay-unselect><a href="javascript:;">库存明细</a></dd>
+            <dd lay-unselect><a href="javascript:;">库存预警</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">用户管理</a>
+          <dl class="layui-nav-child">
+            <dd lay-unselect><a href="javascript:;">用户列表</a></dd>
+            <dd lay-unselect><a href="javascript:;">角色设置</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+    <!-- #endregion -->
+    <!-- #region 右侧内容区域 -->
+    <div class="right-content">
+      <div class="content-nav">
+        <div class="menu">
+          <i class="layui-icon layui-icon-shrink-right"></i>
+        </div>
+        <div class="userinfo">
+          <a href="#">
+            <i class="layui-icon layui-icon-cart"></i>
+            <span>购买该软件</span>
+          </a>
+          <a href="#">
+            <i class="layui-icon layui-icon-android"></i>
+            <span>手机版</span>
+          </a>
+          <a href="#">
+            <i class="layui-icon layui-icon-username"></i>
+            <span>amdin</span>
+          </a>
+        </div>
+      </div>
+      <div class="content-main">
+        <iframe id="iframe" src="./page1.html" frameborder="0"></iframe>
+        <div id="mask"></div>
+      </div>
+    </div>
+    <!-- #endregion -->
+    <script src="../js/index.js"></script>
+  </body>
+</html>

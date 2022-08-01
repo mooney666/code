@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script src="./axios.js"></script>
+    <script>
+      /* 
+            axios 的结果响应的主要属性
+                1. data : 实际的响应数据(一般 json 字符串)
+                2. herders : 响应头信息
+                3. status : 状态码
+                4. statusText : 状态信息
+        */
+      axios.get("http://127.0.0.1:8080/axios-json").then((result) => {
+        console.log(result);
+        console.log(result.status);
+        console.log(result.data.uname);
+      });
+    </script>
+  </body>
+</html>

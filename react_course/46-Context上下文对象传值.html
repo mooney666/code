@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+    <style>
+      .subone {
+        margin-left: 50px;
+      }
+      .subtwo {
+        margin-left: 100px;
+      }
+      .subthree {
+        margin-left: 150px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      // Context: 它主要是应用在组件树之间的传值，外层的父组件负责Context对象提供数据，它内部的嵌套组件都可以使用Context取值，避免props层层传递的现象。
+      // 注意：一个父级组件提供的数据，只能供它内部的子组件使用，它的父级组件是不能用的。
+      // Context 上下文对象提供的数据也是响应式的。
+
+      // 1. 创建上下文对象Context。
+      let ContextObj = React.createContext();
+      ContextObj.displayName = "MyContext"; // 给Context命名，方便在开发者工具中定义这个对象。
+
+      class App extends React.PureComponent {
+        constructor() {
+          super();
+          this.state = {
+            appname: "小明",
+            age: 22,
+            info: {
+              address: "郑州市",
+              sex: "男",
+            },
+          };
+        }
+        render() {
+          console.log("app render");
+          const { appname, age, info } = this.state;
+          return (
+            <div className="app">
+              <h3>App组件</h3>
+              <button
+                onClick={() => {
+                  let info = this.state.info;
+                  info.address = "南阳市";
+                  this.setState({ info, appname: "小红" });
+                }}
+              >
+                修改
+              </button>
+              <hr />
+              {/*2. 利用<ContextObj.Provider>包裹组件树，并提供数据，被它包裹的组件树就可以使用Provider提供的数据。 */}
+              <ContextObj.Provider value={{ appname, age, info }}>
+                <SubOne />
+              </ContextObj.Provider>
+            </div>
+          );
+        }
+      }
+      class SubOne extends React.PureComponent {
+        constructor() {
+          super();
+        }
+        static contextType = ContextObj;
+        render() {
+          return (
+            <div className="subone">
+              <h3>SubOne组件</h3>
+              <p>{JSON.stringify(this.context)}</p>
+              <SubTwo />
+            </div>
+          );
+        }
+      }
+      class SubTwo extends React.PureComponent {
+        constructor() {
+          super();
+        }
+        static contextType = ContextObj;
+        render() {
+          return (
+            <div className="subtwo">
+              <h3>SubTwo组件</h3>
+              <p>{JSON.stringify(this.context)}</p>
+              <SubThree />
+            </div>
+          );
+        }
+      }
+      class SubThree extends React.PureComponent {
+        constructor() {
+          super();
+        }
+        // 3. 通过Class.contextType这个类属性，获取上下文对象Context提供的数据。此属性可以让你使用 this.context 来获取最近 Context 上绑定的值。
+        // contextType 该属性是固定名称。你可以使用 static 这个类属性来初始化你的 contextType。
+        static contextType = ContextObj; // static 静态属性，只能由类名调用：SubThree.contextType;
+        // state = {};  // 实例属性，对象属性
+        // timer = null; // 实例属性，对象属性
+        render() {
+          // 4. 通过 this.context 这个属性获取值。context属性是固定的。
+          // console.log("---", this.context);
+          return (
+            <div className="subthree">
+              <h3>SubThree组件</h3>
+              <p>{JSON.stringify(this.context)}</p>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

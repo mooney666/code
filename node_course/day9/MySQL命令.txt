@@ -1,0 +1,235 @@
+CMD 命令
+    mysql -uroot -p123456  登录
+    net start mysql  启动 mysql 服务
+    net stop mysql   停止 mysql 服务
+MYSQL 命令
+    exit  退出
+    quit  退出
+
+DDL: 操作数据库
+    1.查询数据库
+        show databases;  查看数据库
+    2.创建数据库(如果不存在)
+        create database 数据库名
+        create database if not exists 数据库名
+    3.删除数据库(如果不存在)
+        drop database 数据库名
+        drop database if exists 数据库名
+    4. 使用数据
+        select database();  查看当前使用的数据库
+        use 数据库名;        切换数据库
+DDL: 操作表
+    查询表
+        show tables;  查询当前数据库下所有表名称
+        desc 表名称;   查询表结构信息
+    创建表：
+        create table tb_demo(
+        id int,
+        username varchar(20),
+        password varchar(30)
+        );
+    数据类型和案例见其它资料
+    删除表
+        drop table 表名;
+        drop table if exists 表名
+    修改表：
+        alter table 表名 rename to 新的表名;         修改表名
+        alter table 表名 add 列名 数据类型;           添加列
+        alter table 表名 modify 列名 新的数据类型;     修改数据类型
+        alter table 表名 change 列名 新列名 新数据类型; 修改列名和数据类型
+        alter table 表名 drop 列名;                  删除列
+DML
+    1. 给指定列添加数据
+        insert into 表名(列名1,列名2,...) values(值1,值2,...);
+    2. 给全部列添加数据
+        insert into 表名 values(值1,值2,...);
+    3. 批量添加数据
+        insert into 表名(列名1,列名2,...) values(值1,值2,...),(值1,值2,...),(值1,值2,...)...;
+        insert into 表名 values(值1,值2,...),(值1,值2,...),(值1,值2,...);
+    案例：
+        -- 查询所有
+        SELECT * from tb_student;
+
+        -- 指定列添加数据
+        INSERT INTO tb_student (id,name) VALUES(1,'张三');
+
+        -- 给所有列添加数据(列名的列表可以省略)
+        INSERT into tb_student (id,name,gender,birthday,score,email,tel,status) values(2,'李四','男','1999-01-01',89.9,'lyj@qq.com','13212341234',1);
+
+        INSERT into tb_student  values(3,'剑圣','男','1999-01-01',89.9,'lyj@qq.com','13212341234',1);
+
+        INSERT into tb_student  values(4,'猴子','男','1999-01-01',89.9,'lyj@qq.com','13212341234',1),
+        (5,'兽王','男','1999-01-01',89.9,'lyj@qq.com','13212341234',1),
+        (6,'小鱼人','男','1999-01-01',89.9,'lyj@qq.com','13212341234',1);
+    4.修改数据
+        update 表名 set 列名1 = 值1, 列名2 = 值2 ... [where 条件]
+        update tb_student set gender = '女', score = 99.9 WHERE name = '李四';
+        不加 where 条件，修改全部数据
+
+    5.删除
+        delete from 表名 [where 条件]
+        delete from tb_student where name = '张三';
+DQL查询：
+    -- 查询指定列
+    SELECT name,age,address from stu;
+
+    -- 查询全部列
+    SELECT * FROM stu;
+
+    -- 去重
+    SELECT DISTINCT address from stu;
+
+    -- 别名
+    SELECT name , math as '数学', english as '英语' from stu;
+
+    -- 条件查询
+        -- 1. 查询年龄大于 20 岁的学生信息
+        SELECT * FROM stu WHERE age > 20;
+        -- 2. 查询年龄大于等于 20 岁的学生信息
+        SELECT * FROM stu WHERE age >= 20;
+        -- 3. 查询年龄大于等于 20 ，且小于等于 30 岁的学生信息
+        SELECT * FROM stu WHERE age >= 20 && age <= 30;
+        SELECT * FROM stu WHERE age >= 20 and age <= 30;
+        SELECT * FROM stu WHERE age BETWEEN 20 and 30;
+        -- 4. 查询入学时间在 '1999-01-01' 到 '1999-09-01' 之间的学生信息
+        SELECT * FROM stu WHERE hire_date BETWEEN '1999-01-01' and '1999-09-01';
+        -- 5. 查询年龄等于18岁的学生信息
+        SELECT * FROM stu WHERE age = 18;
+        -- 6. 查询年龄不等于18岁的学生信息
+        SELECT * FROM stu WHERE age != 18;
+        SELECT * FROM stu WHERE age <> 18;
+        -- 7. 查询年龄等于18岁或者年龄等于20岁或者等于22岁的学生信息
+        SELECT * FROM stu WHERE age = 18 or age = 20 or age = 22;
+        SELECT * FROM stu WHERE age in(18, 20, 22);
+        -- 8. 查询英语成绩是 null 的学生信息
+        SELECT * FROM stu WHERE english is null;
+        SELECT * FROM stu WHERE english is not null;
+
+    模糊查询 like
+        /*
+            通配符：
+                  1. _: 代表单个任意字符
+                    2. %：代码任意个数字符
+        */
+        -- 1. 查询姓'张'的学员信息
+        SELECT * FROM stu WHERE name like '张%';
+        -- 2. 查询第二个字是'女'的学员信息
+        SELECT * FROM stu WHERE name like '_女%';
+        -- 3. 查询名字中包含 '女' 的学员信息
+        SELECT * FROM stu WHERE name like '%女%';
+    排序查询：
+         语法： select 字段列表 from 表名 ORDER BY 排序字段名1 [排序方式],排序字段名2 [排序方式]...
+         排序方式：
+                 ASC：升序(默认)
+                 DESC：降序
+         注意：多条件排序，当前边的条件值一样时，才会更具第二个条件进行排序。
+        -- 1. 查询学生信息，按照年龄升序排列
+        SELECT * FROM stu ORDER BY age;
+        SELECT * FROM stu ORDER BY age asc;
+        -- 2. 查询学生信息，按照数学成绩降序排列
+        SELECT * FROM stu ORDER BY math desc;
+        -- 3. 查询学生信息，按照数学成绩降序排列，如果数学成绩一样，再按英语成绩升序排列
+        SELECT * FROM stu ORDER BY math desc, english asc;
+
+   	聚合函数：
+   	    列作为总体，进行纵向计算。
+        语法：
+               select 聚合函数名(列名) FROM 表名;
+   	    count: 统计数量
+   				取值：
+   						1. 主键
+   						2. *
+   						null 不参与运算。
+   		max: 求最大值
+        min：求最小值
+        sum: 求和
+        avg: 求平均数
+        null 不参与统计。
+
+       -- 1. 统计班级一共多少学生
+       SELECT * FROM stu;
+       SELECT count(id) FROM stu;
+       SELECT count(english) FROM stu;
+       -- 2. 查询数学成绩的最高分
+       SELECT max(math) FROM stu;
+       -- 3. 查询数学成绩的最低分
+       SELECT min(math) FROM stu;
+       -- 4. 查询数学成绩的总分
+       SELECT sum(math) FROM stu;
+       -- 5. 查询数学成绩的平均分
+       SELECT avg(math) FROM stu;
+       -- 6. 查询英语成绩的最低分
+       SELECT min(english) FROM stu;
+
+	分组函数
+		  select 字段列表 FROM 表名 [WHERE 分组前条件限定] GROUP BY 分组字段名 [HAVING 分组后条件过滤]...;
+		   注意：分组之后，查询的字段为聚合函数和分组字段，查询其它字段无任何意义。
+
+            SELECT * FROM stu;
+            -- 1. 查询男同学和女同学各自的数学平均分
+            SELECT sex,AVG(math) from stu GROUP BY sex;
+            -- 2. 查询男同学和女同学各自的数学平均分，以及各自的人数
+            SELECT sex,AVG(math),COUNT(*) from stu GROUP BY sex;
+            -- 3. 查询男同学和女同学各自的数学平均分，以及各自的人数，要求：分数低于70的不参与分组。
+            SELECT sex,AVG(math),COUNT(*) from stu WHERE math > 70 GROUP BY sex;
+            -- 4. 查询男同学和女同学各自的数学平均分，以及各自的人数，要求：分数低于70的不参与分组,分组之后的人数大于2
+            SELECT sex,AVG(math),COUNT(*) from stu WHERE math > 70 GROUP BY sex HAVING COUNT(*) > 2;
+    分页查询：
+            SELECT 字段列表 FROM 表名 LIMIT 起始索引, 查询数目
+            起始索引 = (当前页码 -1) * 每页显示条数
+            SELECT * FROM stu;
+            -- 1. 从0开始，查询3条数据
+            SELECT * FROM stu LIMIT 0, 3;
+            -- 2. 每页显示3条数据，查询第1页数据
+            SELECT * FROM stu LIMIT 0, 3;
+            -- 3. 每页显示3条数据，查询第2页数据
+            SELECT * FROM stu LIMIT 3, 3;
+            -- 4. 每页显示3条数据，查询第3页数据
+            SELECT * FROM stu LIMIT 6, 3;
+
+    总结：
+        select 字段列表 from 表名列表 where 条件列表
+                group by 分组字段 having 分组后条件
+                order by 排序字段 limit 分页限定
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

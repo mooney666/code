@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <label for="#">作者:</label>
+      <select id="author">
+        <option value="wce">吴承恩</option>
+        <option value="cxq">曹雪芹</option>
+        <option value="lgz">罗贯中</option>
+      </select>
+      <label for="#">用户:</label>
+      <select id="user">
+        <option value="xm">小明</option>
+        <option value="xl">小李</option>
+        <option value="zs">张三</option>
+      </select>
+      <button id="subscribe">关注</button>
+      <hr />
+      <label for="#">作者:</label>
+      <select id="pubAuthor">
+        <option value="wce">吴承恩</option>
+        <option value="cxq">曹雪芹</option>
+        <option value="lgz">罗贯中</option>
+      </select>
+      <label for="#">内容:</label>
+      <textarea id="info" cols="30" rows="10" placeholder="消息内容"></textarea>
+      <button id="publish">发布</button>
+    </div>
+    <script>
+      let events = [];
+      let events_center = {
+        // 参数：author订阅的作者 nickname订阅用户 func订阅事件
+        subscribe(author, nickname, func) {
+          // 先判断author在事件中心，是否存在
+          const idx = events.findIndex(ev => author === ev.author);
+          if (idx !== -1) {
+            let obj = events[idx];
+            obj.favs.push({
+              nickname,
+              registFunc: func,
+            });
+          } else {
+            events.push({
+              author,
+              favs: [
+                {
+                  nickname,
+                  registFunc: func,
+                },
+              ],
+            });
+          }
+        },
+        publish(author, info) {
+          const idx = events.findIndex(obj => obj.author === author);
+          events[idx].favs.forEach(user =>
+            user.registFunc({ nickname: user.nickname, author, info })
+          );
+        },
+      };
+
+      // 订阅
+      const subBtn = document.getElementById("subscribe");
+      const author = document.getElementById("author");
+      const user = document.getElementById("user");
+      subBtn.onclick = () => {
+        // console.log(author.value, user.value);
+        events_center.subscribe(author.value, user.value, info => {
+          console.log(`${info.author} 对 ${info.nickname} 说：${info.info}`);
+        });
+      };
+
+      // 发布
+      const pubBtn = document.getElementById("publish");
+      pubBtn.onclick = () => {
+        const author = document.getElementById("pubAuthor").value;
+        const content = document.getElementById("info").value;
+        events_center.publish(author, content);
+      };
+    </script>
+  </body>
+</html>

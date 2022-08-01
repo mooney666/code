@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POST</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div id="lol">英雄联盟</div>
+    <script>
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = () => {
+        if (xhr.status == 200 && xhr.readyState == 4) {
+          console.log("请求成功", xhr.responseText);
+        }
+      };
+      xhr.open("POST", "http://localhost:8080/login", true);
+      // post 请求时，设置请求头Content-Type，它是用于指定请求参数，以什么样的格式发送给后端。告诉服务器，我前端发送的请求参数是什么类型的。
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      xhr.send("a=100&b=200");
+    </script>
+  </body>
+</html>

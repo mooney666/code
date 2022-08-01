@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let p = new Promise((resolve, reject) => {
+        let isSuccess = true;
+        if (isSuccess) {
+          resolve("ok"); // resolve() 在任务成功时调用
+        } else {
+          reject("error"); // reject() 在任务失败时调用
+        }
+      });
+
+      // .then(resolve, reject) 两个参数，resolve和reject都可能在 .then 中有处理函数。
+      // p.then(
+      //   (res) => {
+      //     console.log("---", res);
+      //   },
+      //   (err) => {
+      //     console.log("===", err);
+      //   }
+      // );
+
+      // .then() 只有一个参数，那么resolve()会执行.then。reject()执行.catch()
+      p.then((res) => {
+        console.log("---111", res);
+      }).catch((err) => {
+        console.log("===111", err);
+      });
+    </script>
+  </body>
+</html>

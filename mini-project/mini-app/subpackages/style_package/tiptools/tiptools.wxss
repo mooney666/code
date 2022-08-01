@@ -1,0 +1,7 @@
+.item {
+  height: 150rpx;
+  border-bottom: 2rpx solid lightblue;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+}

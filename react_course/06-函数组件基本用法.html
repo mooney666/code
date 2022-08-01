@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script type="text/babel">
+      // 为什么要有组件？
+      // React开发的程序是单页面应用。只能通过切换组件实现页面跳转。
+      // 组件的分类？
+      // 组件分为两大类：1. 页面级别的组件；(react 路由)，针对页面跳转； 2. 普通组件(公共组件)，针对部分html重用的封装；
+      // 组件是什么？
+      // 组件就是由一段html+数据构成的JSX内容，不再像之前直接用变量接收，而是由函数或者类来包裹这一段JSX，这样一个函数或者类就称为组件。
+      // 组件怎么用？
+
+      // 1. 函数组件
+      // 注意：组件首字母要大写。
+      // React 会将以小写字母开头的组件视为原生 DOM 标签。
+	  //例如，<div /> 代表 HTML 的 div 标签，而 <Welcome /> 
+	  //则代表一个组件，并且需在作用域内使用 Welcome。
+      function Welcome() {
+        return (
+          <div className="wel">
+            <h3>这是函数组件Welcome</h3>
+            <Main></Main>
+            <Com></Com>
+          </div>
+        );
+      }
+      function Main() {
+        return (
+          <div className="wel">
+            <h3>这是函数组件Main</h3>
+            <Com></Com>
+          </div>
+        );
+      }
+      function Com() {
+        return (
+          <div className="com">
+            <h3>这是函数组件公共导航条</h3>
+          </div>
+        );
+      }
+      ReactDOM.render(<Welcome></Welcome>, document.getElementById("main"));
+    </script>
+  </body>
+</html>

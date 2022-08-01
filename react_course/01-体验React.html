@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- react.(版本).js React核心库，提供各种类和API。 -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+    <!-- react-dom.js React操作DOM的核心库。 -->
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="main"></div>
+    <button id="btn1">原生JS创建</button>
+    <button id="btn2">React创建</button>
+  </body>
+  <script>
+    //#region 体验原生JS操作DOM。
+    // 这种通过创建元素，设置内容的方式，称为命令式编程。
+    let main = document.querySelector(".main");
+    let btn1 = document.querySelector("#btn1");
+    let infos = ["HTML", "CSS", "JS"];
+    let ul = document.createElement("ul");
+    infos.forEach((course) => {
+      let li = document.createElement("li");
+      li.innerText = course;
+      ul.appendChild(li);
+    });
+    main.appendChild(ul);
+
+    btn1.onclick = () => {
+      // main.innerHTML = "";
+      // let ul = document.createElement("ul");
+      // infos.forEach((course) => {
+      //   let li = document.createElement("li");
+      //   li.innerText = course;
+      //   ul.appendChild(li);
+      // });
+      // main.appendChild(ul);
+
+      let lis = document.querySelectorAll("li");
+      lis[0].innerText = "Java";
+      // lis[1].innerText = "Php";
+      // lis[2].innerText = "Python";
+    };
+    //#endregion
+
+    //#region 体验React渲染元素
+    // 命令式语法
+    /*
+    let users = ["小明", "小红", "小李"];
+    let lis = [];
+    users.forEach((uname) => {
+      let li = React.createElement("li", null, uname);
+      lis.push(li);
+    });
+    // React.createElement(元素名称, 元素属性, 元素内容1, 元素内容2...) 这里创建的不是原生DOM元素，而是一个React特有的元素。
+
+    let ul = React.createElement("ul", null, lis[0], lis[1], lis[2]);
+    // 最终，将创建好的React元素，渲染到div中。
+    ReactDOM.render(ul, document.querySelector(".main"));
+
+    btn2.onclick = () => {
+      let lis = [];
+      users.forEach((uname, i) => {
+        let li;
+        if (i == 0) {
+          li = React.createElement("li", null, "小王");
+        } else {
+          li = React.createElement("li", null, uname);
+        }
+        lis.push(li);
+      });
+      let ul = React.createElement("ul", null, lis[0], lis[1], lis[2]);
+      ReactDOM.render(ul, document.querySelector(".main"));
+    };
+    */
+    //#endregion
+
+    // 总结：
+    // 标签是由标签名称、属性、文本内容都成。
+    // 1. 原生DOM在重复性的操作一组标签的时候，没有性能优化，浏览器每次都会重新渲染这一组标签，哪怕数据和标签都没有发生变化，浏览器每次也都会将标签名称、属性、文本内容重新渲染，造成渲染性能不高；
+    // 2. 而React元素在重复性的操作一组标签的时候，进行了性能优化，当标签名称、属性、文本内容这三项内容没有发生变化的时候，React是不会进行任何的渲染DOM的操作，React只对标签、文本内容、属性发生变化时，点对点的渲染，而不是全部渲染。
+    // React内置了一套虚拟DOM算法，用于对比新旧DOM的变化，从而只渲染变化了的内容。
+  </script>
+</html>

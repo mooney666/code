@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./axios.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>ajax上传文件</title>
+    <style>
+      img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="" alt="" />
+    <form id="info">
+      <input
+        class="avatar"
+        style="display: none"
+        type="file"
+        accept="image/png;image/jpg;image/jpeg;image/gif;"
+      />
+      <br />
+      <input class="upload" type="submit" value="上传" />
+    </form>
+    <p class="nickname"></p>
+    <p class="age"></p>
+    <p class="sex"></p>
+    <p class="address"></p>
+    <script>
+      const userInfo = JSON.parse(localStorage.getItem("info"));
+      $(".nickname").text(`昵称：${userInfo.name}`);
+      $(".age").text(`年龄：${userInfo.age}`);
+      $(".sex").text(`性别：${userInfo.sex}`);
+      $(".address").text(`地址：${userInfo.address}`);
+      $("img").attr("src", `http://localhost:9000${userInfo.avatar}`);
+
+      // 处理头像上传部分的内容
+
+      // 1. 触发文件选择弹框
+      $("img").click(() => {
+        // 主动触发input type="file"的click点击事件，目的是出现弹框
+        $(".avatar").click();
+      });
+      // 2. 监听弹框选择文件的变化
+      $(".avatar").change((e) => {
+        // 获取文件对象，JS内置的File类型的对象。
+        const file = e.target.files[0];
+        // JS中可以根据图片文件对象File，生成URL地址。
+        // URL.createObjectURL(file): 该方法主要是根据File对象，生成URL连接。
+        // blob:http://127.0.0.1:5500/f2b1bce5-69eb-46ad-8c6b-76e83251b097
+        $("img").attr("src", URL.createObjectURL(file));
+
+        // 如果不要上传按钮，此时就应该发送上传图片的请求了。
+      });
+
+      // 3. 上传头像
+      $(".upload").click((e) => {
+        e.preventDefault();
+        // 先获取当前input选中的图片文件
+        let file = $(".avatar").prop("files")[0]; // jQuery写法获取选中的文件对象File
+        // let file = document.querySelector(".avatar").files[0]; // 原生写法获取选中的文件对象File
+
+        let formData = new FormData(); // 它就类似于form标签的enctype="multipart/form-data"，以formdata格式上传文件
+        formData.append("avatar", file); // 这个append的行为就相当于form上传里的input type='file'的name属性
+        formData.append("name", userInfo.name);
+
+        $.ajax({
+          url: "http://localhost:9000/ajaxupload",
+          method: "POST",
+          data: formData,
+          contentType: false, // jQuery默认的contentType是application/x-www-form-urlencoded
+          processData: false, // jQuery默认会按照contentType的值，来处理转化数据。
+          success: (data) => {
+            console.log("上传成功: ", data);
+            // 更新本地保存的头像信息。
+            userInfo.avatar = `${data.path}`;
+            localStorage.setItem("info", JSON.stringify(userInfo));
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

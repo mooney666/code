@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script src="./axios.js"></script>
+    <script>
+      // 1. 通过选项传递参数(默认传递的是 json 格式的数据  F12 的 network)
+      axios
+        .put("http://127.0.0.1:8080/put/789", {
+          uname: "lisi",
+          pwd: "coco",
+        })
+        .then((result) => {
+          console.log(result.data);
+        });
+    </script>
+  </body>
+</html>

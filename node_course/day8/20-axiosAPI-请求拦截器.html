@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script src="./axios.js"></script>
+    <script>
+      /* 
+        请求拦截器
+            在请求发出之前，设置一些信息
+            axios ————> 请求拦截器  ————> 服务器
+      */
+      // 添加请求拦截器，这个拦截器是针对所有请求的，一般设置通用配置，最常用的配置Content-Type，Token
+      axios.interceptors.request.use(
+        function (config) {
+          // 这个config配置对象，默认就是axios内部的配置对象，再拦截器中暴漏出来，让我们修改请求配置。
+          config.headers.token = "123";
+          config["params"] = { name: "小红", age: 44 };
+          console.log("====", config);
+          // 在发送请求之前做些什么，config配置之后，必须返回
+          return config;
+        },
+        function (error) {
+          // 对请求错误做些什么
+          return Promise.reject(error);
+        }
+      );
+
+      // get请求没有参数时，拦截器的config也是没有GET请求的params
+      axios.get("http://127.0.0.1:8080/test4").then(function (result) {
+        console.log(result);
+      });
+
+      // get请求携带参数时，拦截器的config也包含GET请求的params
+      // axios
+      //   .get("http://127.0.0.1:8080/test4", {
+      //     params: {
+      //       name: "小王",
+      //       age: 22,
+      //     },
+      //   })
+      //   .then(function (result) {
+      //     console.log(result);
+      //   });
+    </script>
+  </body>
+</html>

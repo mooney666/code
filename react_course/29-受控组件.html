@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      // 受控组件：在React中，表单元素(input select textarea等)被React以setState的方式驱动视图变化的元素就称为受控组件。每一个受控组件都维护自己的state数据，当输入内容发生变化时，对应的state也会随之更新。
+      class App extends React.Component {
+        state = {
+          username: "",
+          desc: "",
+          sele: "coconut",
+          sex: "man",
+          hobby: ["篮球", "足球"],
+        };
+        textChange(e) {
+          let value = e.target.value;
+          this.setState({
+            username: value,
+          });
+        }
+        areaChange(e) {
+          this.setState({
+            desc: e.target.value,
+          });
+        }
+        selectChange(e) {
+          this.setState({
+            sele: e.target.value,
+          });
+        }
+        radioChange(e) {
+          this.setState({
+            sex: e.target.value,
+          });
+        }
+        checkBoxChange(e) {
+          const val = e.target.value;
+          const idx = this.state.hobby.indexOf(val);
+          if (idx !== -1) this.state.hobby.splice(idx, 1);
+          else this.state.hobby.push(val);
+          this.forceUpdate();
+        }
+        render() {
+          const { username, desc, sele, sex, hobby } = this.state;
+          return (
+            <div className="root">
+              <p>输入的姓名: {username}</p>
+              姓名:
+              <input
+                type="text"
+                value={username}
+                onChange={this.textChange.bind(this)}
+              />
+              <hr />
+              <p>输入的简介: {desc}</p>
+              <textarea
+                cols="30"
+                rows="10"
+                value={desc}
+                onChange={this.areaChange.bind(this)}
+              ></textarea>
+              <hr />
+              <p>选择的水果:{sele}</p>
+              <select value={sele} onChange={this.selectChange.bind(this)}>
+                <option value="grapefruit">葡萄柚</option>
+                <option value="lime">酸橙</option>
+                <option defaultValue value="coconut">
+                  椰子
+                </option>
+                <option value="mango">芒果</option>
+              </select>
+              <hr />
+              <p>选择性别:{sex}</p>
+              <input
+                type="radio"
+                name="sex"
+                value="man"
+                defaultChecked
+                onChange={this.radioChange.bind(this)}
+              />
+              男
+              <input
+                type="radio"
+                name="sex"
+                value="women"
+                onChange={this.radioChange.bind(this)}
+              />
+              女
+              <hr />
+              <p>兴趣爱好:{hobby.join(";")}</p>
+              <input
+                type="checkbox"
+                defaultChecked
+                value="篮球"
+                onChange={this.checkBoxChange.bind(this)}
+              />
+              篮球
+              <input
+                type="checkbox"
+                value="足球"
+                defaultChecked
+                onChange={this.checkBoxChange.bind(this)}
+              />
+              足球
+              <input
+                type="checkbox"
+                value="羽毛球"
+                onChange={this.checkBoxChange.bind(this)}
+              />
+              羽毛球
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+
+      // 作业：
+      // 基于layui+react制作增删改的小案例：
+      // 1. 添加信息；初始页面没有数据，显示"暂时没有用户信息，请先添加"; 有数据之后，显示数据列表，做分页查询；
+      // 2. 删除信息；每个数据行后面都有一个删除按钮；
+      // 3. 修改信息；点击修改按钮时，弹出一个表单，表单中要展示用户的当前数据，然后进行修改提交；
+    </script>
+  </body>
+</html>

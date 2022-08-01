@@ -1,0 +1,4 @@
+/**app.wxss**/
+.test {
+  margin: 0;
+}

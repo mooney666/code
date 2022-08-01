@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      // fecth 和 原生 ajax 一样，发送POST请求的时候，都必须设置 Content-Type
+      // post
+      fetch("http://127.0.0.1:8080/test5", {
+        method: "post",
+        body: "name=lisi&age=23",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      })
+        .then(function (data) {
+          return data.json();
+        })
+        .then(function (data) {
+          console.log(data);
+        });
+
+      // post2
+      fetch("http://127.0.0.1:8080/test5", {
+        method: "post",
+        body: JSON.stringify({
+          name: "剑圣",
+          age: 44,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then(function (data) {
+          return data.json();
+        })
+        .then(function (data) {
+          console.log(data);
+        });
+    </script>
+  </body>
+</html>

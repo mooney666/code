@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class ComOne extends React.Component {
+        state = {
+          oneName: "one_小明",
+        };
+        changeOneName(e) {
+          this.setState({ oneName: e.target.value });
+          this.props.func(e.target.value);
+        }
+        render() {
+          return (
+            <div className="one">
+              <h3>子组件one</h3>
+              <p>收到ComTwo组件数据:{this.props.tname}</p>
+              <input
+                type="text"
+                value={this.state.oneName}
+                onChange={this.changeOneName.bind(this)}
+              />
+            </div>
+          );
+        }
+        componentDidMount() {
+          // 组件渲染完毕，可以从props中获取父组件传递的prop，实现初始数据的传递。
+          this.props.func(this.state.oneName);
+        }
+      }
+
+      class ComTwo extends React.Component {
+        state = {
+          twoName: "two_小王",
+        };
+        changeTwoName(e) {
+          this.setState({ twoName: e.target.value });
+          this.props.func(e.target.value);
+        }
+        render() {
+          return (
+            <div className="two">
+              <hr />
+              <h3>子组件two</h3>
+              <p>收到ComOne组件数据:{this.props.oname}</p>
+              <input
+                type="text"
+                value={this.state.twoName}
+                onChange={this.changeTwoName.bind(this)}
+              />
+            </div>
+          );
+        }
+        componentDidMount() {
+          this.props.func(this.state.twoName);
+        }
+      }
+
+      class App extends React.Component {
+        state = {
+          one_name: "",
+          two_name: "",
+        };
+        receiveComOneData(data) {
+          this.setState({ one_name: data });
+        }
+        receiveComTwoData(data) {
+          this.setState({ two_name: data });
+        }
+        render() {
+          return (
+            <div className="app">
+              <ComOne
+                func={this.receiveComOneData.bind(this)}
+                tname={this.state.two_name}
+              />
+              <ComTwo
+                func={this.receiveComTwoData.bind(this)}
+                oname={this.state.one_name}
+              />
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+
+      // 兄弟组件传值：
+      // 利用共同的父组件过渡数据；
+    </script>
+  </body>
+</html>

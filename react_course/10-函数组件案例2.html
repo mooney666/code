@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        height: 60px;
+        align-items: center;
+      }
+      .nav button {
+        margin-right: 10px;
+      }
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .container > .course {
+        width: 220px;
+        margin-right: 4px;
+        margin-bottom: 20px;
+      }
+      .course img {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script type="text/babel">
+      // 封装发送请求的函数
+      async function ajax(url) {
+        let result = await fetch(url)
+          .then((resp) => {
+            return resp.json();
+          })
+          .then((data) => {
+            return data;
+          });
+        return result;
+      }
+      // 封装请求渲染函数
+      async function loadDatas(page) {
+        ajax(
+          `https://www.lanqb.com/api/course/video/indexv3?type=${globalType}&level=${globalLevel}&page=${page}&limit=20`
+        ).then(({ data }) => {
+          globalDatas = data;
+          console.log(data);
+          renderDOM();
+        });
+      }
+
+      // 发送请求，拿首页数据
+      let globalDatas = null;
+      let globalType = 2; // 左侧 全部
+      let globalLevel = ""; // 右侧 全部
+
+      loadDatas(1);
+
+      // 左右两侧按钮，绑定两个点击事件
+      /*
+      // 左侧按钮点击事件
+      function clickLeftEvent(type) {
+        globalType = type;
+        loadDatas(1);
+      }
+      // 右侧按钮点击事件
+      function clickRightEvent(level) {
+        globalLevel = level;
+        loadDatas(1);
+      }
+      */
+
+      // 左右两侧按钮，绑定同一个点击事件
+      function clickEvent(info) {
+        /*
+        // 通过info的数据类型区分左右
+        switch (typeof info) {
+          case "string":
+            // 说明点击的是右侧的按钮
+            globalLevel = info;
+            break;
+          case "number":
+            // 说明点击的是左侧的按钮
+            globalType = info;
+            break;
+          default:
+            break;
+        }
+        loadDatas(1);
+        */
+
+        // 通过参数对象des属性值，区分左右
+        switch (info.des) {
+          case "right":
+            // 说明点击的是右侧的按钮
+            globalLevel = info.val;
+            break;
+          case "left":
+            // 说明点击的是左侧的按钮
+            globalType = info.val;
+            break;
+          default:
+            break;
+        }
+        loadDatas(1);
+      }
+
+      function renderDOM() {
+        // 创建课程组件
+        function Course(props) {
+          let course = globalDatas[props.idx];
+          return (
+            <div className="course">
+              <img src={"https://ss.lanqb.com/" + course.posters.web} alt="" />
+              <p className="title">标题: {course.title}</p>
+              <p className="count">{course.statistic.purchases} 人在学习</p>
+              <p className="author">作者:{course.profile.nickname}</p>
+            </div>
+          );
+        }
+        // 创建根组件
+        function Root() {
+          // console.log("创建Root组件");
+          return (
+            <div id="root">
+              <div className="nav">
+                <div className="btns-left">
+                  {/*点击左侧按钮：点击事件clickEvent第一个参数是对应左侧选项按钮，是可以确定值的，不确定的是右侧的参数。*/}
+                  {/*
+                  <button onClick={() => clickLeftEvent(2)}>全部</button>
+                  <button onClick={() => clickLeftEvent(1)}>最新</button>
+                  <button onClick={() => clickLeftEvent(3)}>最热</button>
+                  */}
+                  {/*
+                  <button onClick={() => clickEvent(2)}>全部</button>
+                  <button onClick={() => clickEvent(1)}>最新</button>
+                  <button onClick={() => clickEvent(3)}>最热</button>
+                  */}
+                  <button onClick={() => clickEvent({ des: "left", val: 2 })}>
+                    全部
+                  </button>
+                  <button onClick={() => clickEvent({ des: "left", val: 1 })}>
+                    最新
+                  </button>
+                  <button onClick={() => clickEvent({ des: "left", val: 3 })}>
+                    最热
+                  </button>
+                </div>
+                <div className="btns-right">
+                  {/*点击右侧按钮：点击事件clickEvent第二个参数是对应右侧选项按钮，是可以确定值的，不确定的是左侧的参数。*/}
+                  {/*
+                  <button onClick={() => clickRightEvent("")}>全部</button>
+                  <button onClick={() => clickRightEvent("1")}>入门</button>
+                  <button onClick={() => clickRightEvent("2,3,4,5")}>
+                    提升
+                  </button>
+                  */}
+                  {/*
+                  <button onClick={() => clickEvent("")}>全部</button>
+                  <button onClick={() => clickEvent("1")}>入门</button>
+                  <button onClick={() => clickEvent("2,3,4,5")}>提升</button>
+                  */}
+                  <button onClick={() => clickEvent({ des: "right", val: "" })}>
+                    全部
+                  </button>
+                  <button
+                    onClick={() => clickEvent({ des: "right", val: "1" })}
+                  >
+                    入门
+                  </button>
+                  <button
+                    onClick={() => clickEvent({ des: "right", val: "2,3,4,5" })}
+                  >
+                    提升
+                  </button>
+                </div>
+              </div>
+              <hr />
+              <div className="container">
+                {globalDatas.map((obj, i) => {
+                  return <Course idx={i} />;
+                })}
+              </div>
+            </div>
+          );
+        }
+        // console.log("开始渲染真实DOM");
+        ReactDOM.render(<Root />, document.getElementById("main"));
+        // console.log("真实DOM渲染结束");
+      }
+    </script>
+  </body>
+</html>

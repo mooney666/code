@@ -1,0 +1,19 @@
+<view class="user">
+  <view class="userinfo">
+    <!-- block: 不会生成额外的代码， 只是包裹一段代码。-->
+    <block wx:if="{{!hasUserInfo}}">
+      <button bindtap="getUserProfile">新版获取头像昵称 </button>
+    </block>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <!-- 下面是普通权限：录音、定位等 -->
+  <view class="authrize">
+    <audio src="{{audioSrc}}" controls="true"></audio>
+    <button bindtap="startRecord">开始录音</button>
+    <button bindtap="startNewRecord">新接口录音</button>
+    <button bindtap="startPlayRecord">播放录音</button>
+  </view>
+</view>

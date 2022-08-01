@@ -1,0 +1,41 @@
+/*!***************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/css/index.css ***!
+  \***************************************************************************************************************/
+.p {
+  background-color: lightblue;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+}
+.list {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  -ms-flex-align: center;
+      align-items: center;
+  background-color: yellow;
+  height: 300px;
+}
+.list > div {
+  width: 200px;
+  height: 100px;
+  background-color: blue;
+}
+/*!********************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js!./src/less/index.less ***!
+  \********************************************************************************************************************************************************/
+.less p {
+  background-color: blue;
+  text-align: center;
+  line-height: 40px;
+}
+
+/*!********************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/sass/index.sass ***!
+  \********************************************************************************************************************************************************/
+.sass p {
+  background-color: blue;
+  text-align: center;
+  line-height: 40px;
+}

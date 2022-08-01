@@ -1,0 +1,100 @@
+/* 
+jwt 认证机制 Json web token
+    jwt 特点
+        高并发：当用户足够多，服务器存储session时，会内存溢出。
+        分布式
+        跨语言
+        扩展性好
+
+    jwt广义：jwt就是签发token和校验token的一种机制。
+    jwt狭义：jwt就是token
+
+    基于token的鉴权机制类似于http协议也是无状态的，他不需要在服务端去保留用户的认证信息或者会话信息，
+    这就意味着基于token认证机制的应用不需要考虑用户在哪一台服务器登陆了，这就为应用的扩展提供了便利
+    
+    工作原理：
+    如图：07-jwt.png
+
+    流程：
+        用户使用用户名密码来请求服务器
+        服务器进行验证用户信息
+        服务器通过验证，加密用户信息生成一个 token ，发给用户n
+        客户端(localStorage/sessionStorage)存储token，并在每次访问时加上这个 token 值
+        http 的请求头 Authroization 字段，保存 token 的值
+        服务器解密，验证 token 值，获取对应的数据，并返回给服务器
+    
+    总结：用户信息通过 token 字符串的形式，保存在客户端浏览器。服务器通过还原 token，验证用户身份
+    
+    jwt 组成部分
+        jwt 通常由三部分组成，分别是 Header(头部)、PayLoad(有效负荷)、Signature(签名)。
+        三者用英文 . 分割，格式如下：
+            Header.PayLoad.Signature
+        示例：
+        bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5hbnRfaWQiOiJobnIxIiwiZGVwY
+        cmFtOmNoYW5uZWw6Y3JlYXRlIiwicHJvZ3JhbTpjaGFubmVsOmxpc3QiLCJwcm9ncmFtOmNoYW5uZ
+        WwiLCJiYW9saWFvOmFkZCJdfSwianRpIjoiZDJiODhjOGQtY2EwMC00ZmYyLTkxMjMtMDhjODY0Zj
+        UxZmEzIn0.ibb_kTrYJ34h0xIv5IuNY6NAJ7ZrCieE13Myp5DdF3k    
+
+        Header 和 Signature 是安全相关的部分，如加密算法等等。
+        PayLoad:用户信息加密后的字符串，如用户的权限，id 等。
+    
+    使用方法：
+        jwt 放入 http 请求头的 Authroization 字段中
+        Authroization: Bearer <token> 
+
+    在 express 中使用 JWT
+        1.安装 jwt 相关的包
+            npm install jsonwebtoken@8.5.1 express-jwt@5.3.3
+                jsonwebtoken: 将用户信息加密生成 jwt 字符串，返回给前端
+                express-jwt:  用于将前端传递的 jwt 字符串解密，还原成 json 对象，让后端负责检查token的正确性
+        2.导入 jwt 相关的包
+            // 导入生成 jwt 字符串的包
+            const jwt = require('jsonwebtoken');
+            // 导入 jwt 字符串解析还原为对象的包
+            const expressJWT = require('express-jwt');
+        3.定义 secret 密钥
+            为了保证 jwt 字符串的安全性，防止 jwt 字符串在网络中被别人破解，我们需要定义
+            一个用于加密和解密的 secret 密钥。
+                1.当生成 jwt 字符串时，需要用 secret 密钥对用户信息进行加密。
+                2.当把 jwt 字符串解析还原成 json 对象时，需要使用 secret 密钥进行解密
+                
+            实例代码：
+                const secretKey = "123456";
+        4.登录成功后生成 jwt 字符串
+            调用 jsonwebtoken 包的 sign() 函数
+            // 参数1：用户的信息对象
+            // 参数2：密钥
+            // 参数3：配置对象，可以配置有效期
+            const tokenStr = jwt.sign({ username: userinfo.username }, secretKey, {
+                expiresIn: "50s",
+            });
+
+        5.将 jwt 字符串还原为 json 对象
+            客户端每次请求需要权限的接口时，都会竹筒通过请求头的 Authorization 字段，
+            将 token 字符串发送给服务器进行认证
+            此时可以通过 express-jwt 中间件，解析
+            // app.use(); 注册中间件
+            // expressJWT({ secret: secretKey }) // 解析token 的中间件
+            // .unless({ path: [/^\/api\//] }))  // 指定哪些接口不需要访问权限
+        
+            app.use(expressJWT({ secret: secretKey }).unless({ path: [/^\/api\//] }));
+
+        6.捕获解析 jwt 失败后产生的错误
+            当使用 express-jwt 解析字符串时，如果字符串不合法或国企，就会产生一个解析失败
+            的错误，影响项目正常运行。我们可以通过 Express 的错误中间件，捕获这个异常
+
+            示例代码：
+                app.use((err, req, res, next) => {
+                    if (err.name === "UnauthorizedError") {
+                        return res.send({
+                        status: 401,
+                        message: "无效的token",
+                        });
+                    }
+                    res.send({
+                        status: 500,
+                        message: "未知错误",
+                    });
+                });
+
+*/

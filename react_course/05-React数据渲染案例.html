@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script> -->
+
+    <script src="https://unpkg.com/react@18.1.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18.1.0/umd/react-dom.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script type="text/babel">
+      let root = ReactDOM.createRoot(document.getElementById("main"));
+      async function ajaxAsync(url) {
+        let data = await fetch(url).then((response) => {
+          return response.json();
+        });
+        return data;
+      }
+
+      function ajaxTool(page) {
+        ajaxAsync(
+          `https://www.lanqb.com/api/course/video/indexv3?type=2&page=${page}&limit=20`
+        ).then(({ data }) => {
+          renderDOM(data);
+        });
+      }
+      ajaxTool(1);
+
+      // 渲染DOM的部分
+      function renderDOM(datas) {
+        // JSX中规定：JSX模板必须有一个根标签包裹，最外层不能有并列的标签存在。
+        let ul = (
+          <div>
+            {/*
+            这里是JSX的注释语句
+            JSX绑定事件：区别于html规范(onclick="prevBtn")，React里面使用onClick绑定事件。事件名称不能使用字符串"prevBtn"，需要使用{prevBtn}。
+            */}
+            <button id="prev" onClick={prevBtn}>
+              上一页
+            </button>
+            <button id="next" onClick={nextBtn}>
+              下一页
+            </button>
+            <ul>
+              {datas.map((obj) => (
+                <li>
+                  <h4>课程名称:{obj.title}</h4>
+                  <p>
+                    <span>学习人数:{obj.study_num}</span>
+                    <span>
+                      关键字:{obj.tags.map((tag) => tag.label.label_name + ";")}
+                    </span>
+                  </p>
+                  <p>作者:{obj.profile.nickname}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+        // 此时 #main 这个div内部的元素全部会被清空。
+        // ReactDOM.render(ul, document.getElementById("main"));
+
+        // React v18 渲染
+        // 报警告：Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+        // 警告解析：ReactDOM.createRoot()在重复渲染新的JSX时，只需要createRoot一次即可，不需要每次渲染都去createRoot。只需调用render即可。
+        // let root = ReactDOM.createRoot(document.getElementById("main"));
+
+        root.render(ul);
+      }
+
+      let curPage = 1;
+      function prevBtn() {
+        console.log("上一页");
+        curPage -= 1;
+        ajaxTool(curPage);
+      }
+      function nextBtn() {
+        console.log("下一页");
+        curPage += 1;
+        ajaxTool(curPage);
+      }
+    </script>
+  </body>
+</html>

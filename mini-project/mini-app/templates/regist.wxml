@@ -1,0 +1,3 @@
+<template name="regist">
+  <view class="regist">注册组件-{{name}}-{{age}}</view>
+</template>

@@ -1,0 +1,64 @@
+.page1-nav {
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  > .page1-nav-left {
+    > i {
+      color: #333333 !important;
+    }
+    a {
+      color: #333333 !important;
+    }
+  }
+  > .page1-nav-right button {
+    background-color: #2a5caa;
+    color: white;
+    font-weight: bold;
+  }
+}
+.page1-search {
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f3f3fa;
+  > .page1-search-left button {
+    background-color: #009966 !important;
+    height: 26px;
+    line-height: 17px;
+    padding: 5px 16px;
+    font-size: 12px;
+  }
+  > .page1-search-left .other {
+    background-color: transparent !important;
+    color: #333333;
+  }
+  > .page1-search-left .other:hover {
+    background-color: #009966 !important;
+    color: white;
+  }
+  > .page1-search-right {
+    display: flex;
+    align-items: center;
+    .layui-form-item {
+      margin: 0;
+      > .layui-input-inline {
+        width: 100px;
+        margin-right: 0;
+      }
+    }
+    .layui-form-label {
+      padding-right: 5px;
+      width: 56px;
+    }
+    .layui-input {
+      height: 30px;
+      margin-top: 5px;
+      border: 1px solid #c0cde0;
+    }
+    > button {
+      margin-left: 10px;
+    }
+  }
+}

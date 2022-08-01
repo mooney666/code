@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      function Login() {
+        return (
+          <div className="login">
+            <h3>登录组件</h3>
+          </div>
+        );
+      }
+      function Regist() {
+        return (
+          <div className="regist">
+            <h3>注册组件</h3>
+          </div>
+        );
+      }
+      class App extends React.Component {
+        // state = {
+        //   comName: "regist", // 记录当前组件名称：是登录还是注册
+        // };
+        comName = "login";
+        clickEvent(name) {
+          // this.setState({
+          //   comName: name,
+          // });
+          console.log(name);
+          this.comName = name;
+          this.forceUpdate();
+        }
+        render() {
+          console.log("reder()");
+          // const { comName } = this.state;
+
+          /*条件渲染方式三：if语句实现。*/
+          let curCom;
+          if (this.comName === "login") curCom = <Login />;
+          else curCom = <Regist />;
+          return (
+            <div className="app">
+              <button onClick={() => this.clickEvent("login")}>登录</button>
+              <button onClick={() => this.clickEvent("regist")}>注册</button>
+              <hr />
+              {/*条件渲染方式一：逻辑与 && 运算实现。*/}
+              {this.comName === "login" && <Login />}
+              {this.comName === "regist" && <Regist />}
+              <hr />
+              {/*条件渲染方式二：三目运算符实现。*/}
+              {this.comName === "login" ? <Login /> : <Regist />}
+              <hr />
+              {curCom}
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

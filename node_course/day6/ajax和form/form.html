@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      ul {
+        list-style: none;
+      }
+      .main {
+        background-color: lightblue;
+        width: 800px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 
+    form 仅支持 GET/POST 两种请求。
+   -->
+    <div class="main">
+      <ul>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+      </ul>
+      <form
+        action="https://www.lanqb.com/school/professional?status=show&limit=20&page=1&course_style_ids=&weight=desc"
+        method="get"
+      >
+        <input type="text" placeholder="账号" />
+        <br />
+        <input type="text" placeholder="密码" />
+        <br />
+        <input type="submit" value="登录" />
+      </form>
+    </div>
+    <br />
+    <br />
+    <hr />
+    <br />
+    <br />
+    <!-- ajax： -->
+    <div class="main">
+      <ul>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+      </ul>
+      <form id="ajaxForm">
+        <input type="text" placeholder="账号" />
+        <br />
+        <input type="text" placeholder="密码" />
+        <br />
+        <input id="login" type="button" value="登录" />
+      </form>
+      <span style="display: none"></span>
+    </div>
+    <script>
+      // $("#ajaxForm").submit((e) => {
+      //   e.preventDefault();
+      //   console.log("发请求");
+      // });
+
+      $("#login").click(() => {
+        $.get(
+          "https://www.lanqb.com/school/professional?status=show&limit=20&page=1&course_style_ids=&weight=desc",
+          (data) => {
+            console.log(data);
+            $("#ajaxForm").css({
+              display: "none",
+            });
+            $("span").css("display", "block").text("欢迎，张三");
+          }
+        );
+      });
+
+      // form和ajax的区别：
+      // 1. form是整体刷新，请求成功会进行页面的跳转，而ajax是局部刷新，在请求时不会跳转页面，页面加载效率也更高；
+      // 2. form请求用户体验不好，涉及到了页面的来回跳转；而ajax用户体验好，因为它请求时页面是不变的；
+      // 3. form更适合传统的前后端不分离项目；而ajax更适合前后端分离的项目；
+      // 4. 支持的请求方式不一样；
+    </script>
+  </body>
+</html>

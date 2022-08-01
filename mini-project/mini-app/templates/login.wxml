@@ -1,0 +1,3 @@
+<template name="login">
+  <view class="login">登录组件-{{name}}-{{age}}</view>
+</template>

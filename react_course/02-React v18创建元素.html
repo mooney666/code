@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/react@18.1.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18.1.0/umd/react-dom.development.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script>
+      // 1. React.createElement() 生成React元素结构
+      // let p = React.createElement("p", { class: "p", id: "p" }, "段落标签");
+      // // 2. ReactDOM.createRoot() 生成React根元素对象
+      // let root = ReactDOM.createRoot(document.getElementById("main"));
+      // root.render(p);
+
+      // let p1 = React.createElement("div", { class: "p", id: "p" }, "段落标签1");
+      // root.render(p1);
+
+      // ReactDOM.render() 方法一般只调用一次即可，需要提前将所要展示的内容拼接好，一次性渲染。
+      let s1 = React.createElement(
+        "span",
+        { className: "s", id: "s" },
+        "行标签"
+      );
+      let p = React.createElement(
+        "p",
+        { className: "p", id: "p" },
+        "段落标签",
+        s1
+      );
+      let span = React.createElement(
+        "span",
+        { className: "s", id: "s" },
+        "行标签"
+      );
+      let div = React.createElement("div", { className: "left" }, span, p);
+      let root = ReactDOM.createRoot(document.getElementById("main"));
+      root.render(div);
+
+      // 总结：以上写法属于命令式语法，如果想要使用声明式语法，只有采用JSX。
+    </script>
+  </body>
+</html>

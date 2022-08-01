@@ -1,0 +1,7 @@
+.bar {
+  height: 200rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: lightblue;
+}

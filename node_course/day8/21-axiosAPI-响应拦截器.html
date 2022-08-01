@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script src="./axios.js"></script>
+    <script>
+      /* 
+            响应拦截器
+                在获取数据之前对数据进行一些加工
+                服务器 ————> 响应拦截器  ————> axios
+        */
+      axios.interceptors.response.use(
+        function (res) {
+          // console.log(res);
+          // 对响应数据数据
+          res = res.data;
+          return res;
+        },
+        function (err) {
+          console.log(err);
+        }
+      );
+      axios.get("http://127.0.0.1:8080/axios").then(function (result) {
+        console.log(result);
+      });
+    </script>
+  </body>
+</html>

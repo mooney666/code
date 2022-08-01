@@ -1,0 +1,7 @@
+<!--pages/cates/cates.wxml-->
+<view>
+  <!-- bind:searchevent 自定义事件searchevent，然后让子组件触发这个事件。 -->
+  <navbar title="分类" bind:searchevent="receiveData"></navbar>
+  <view>kw: {{kw}}</view>
+  <van-button type="primary">按钮</van-button>
+</view>

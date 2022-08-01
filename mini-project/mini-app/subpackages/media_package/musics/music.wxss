@@ -1,0 +1,17 @@
+/* pages/musics/music.wxss */
+.music {
+  line-height: 40px;
+  border-bottom: 2rpx solid lightblue;
+  color: blue;
+  text-align: center;
+}
+.player {
+  margin-top: 100rpx;
+  display: flex;
+  justify-content: space-around;
+  height: 50px;
+  align-items: center;
+}
+.slider {
+  width: 400rpx;
+}

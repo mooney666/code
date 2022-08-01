@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      async function ajax(url) {
+        let data = fetch(url, {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => data);
+        return data;
+      }
+
+      // 导航条类组件：导航条是需要发送请求，报错接口数据。
+      /*
+      class Nav extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            navs: [], // 初始值尽量和后面要保存的数据类型保持一致。
+          };
+        }
+        navEvent = async (id) => {
+          let data = await ajax(
+            `https://www.lanqb.com/school/professional?status=show&limit=20&page=1&course_style_ids=${id}&weight=desc`
+          );
+          console.log(data);
+        };
+        render() {
+          return (
+            <div className="nav">
+              {this.state.navs.map((nav) => (
+                <button onClick={() => this.navEvent(nav.id)}>
+                  {nav.style_title}
+                </button>
+              ))}
+            </div>
+          );
+        }
+        // componentDidMount(): 生命周期函数，组件被渲染为真实DOM时，自动执行。
+        componentDidMount() {
+          fetch(
+            "https://www.lanqb.com/api/course/course-group-list?course_style=1"
+          )
+            .then((response) => response.json())
+            .then(({ course_style }) => {
+              console.log(course_style);
+              // this.setState()会触发render()渲染函数重新渲染
+              this.setState({
+                navs: course_style,
+              });
+            });
+        }
+      }
+      */
+
+      // 声明课程组件
+      class Course extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            courseLists: [],
+            navs: [],
+          };
+        }
+        navEvent = async (id) => {
+          let { data } = await ajax(
+            `https://www.lanqb.com/school/professional?status=show&limit=20&page=1&course_style_ids=${id}&weight=desc`
+          );
+          this.setState({
+            courseLists: data,
+          });
+        };
+        render() {
+          return (
+            <div className="course">
+              {this.state.navs.map((nav) => (
+                <button onClick={() => this.navEvent(nav.id)}>
+                  {nav.style_title}
+                </button>
+              ))}
+              <hr />
+              {this.state.courseLists.map((c) => (
+                <CourseItem course={c} />
+              ))}
+            </div>
+          );
+        }
+        async componentDidMount() {
+          let courses = await ajax(
+            "https://www.lanqb.com/school/professional?status=show&limit=20&page=1&course_style_ids=&weight=desc"
+          );
+          let navs = await ajax(
+            `https://www.lanqb.com/api/course/course-group-list?course_style=1`
+          );
+          console.log(courses, navs);
+          this.setState({
+            courseLists: courses.data,
+            navs: navs.course_style,
+          });
+        }
+      }
+
+      function CourseItem(props) {
+        return (
+          <div>
+            <p>标题：{props.course.title}</p>
+          </div>
+        );
+      }
+
+      // 最外层的根组件，使用函数组件。它仅仅是包裹其他组件。
+      function App() {
+        return (
+          <div className="app">
+            {/*<Nav />
+            <hr />*/}
+            <Course />
+          </div>
+        );
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

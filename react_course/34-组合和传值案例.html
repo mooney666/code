@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+    <style>
+      .app {
+        width: 1000px;
+        margin: 0 auto;
+        background-color: lightblue;
+      }
+      .form,
+      .list {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class App extends React.Component {
+        state = {
+          name: "",
+          age: "",
+          sex: "男",
+          users: [],
+        };
+        getFormDatas = () => {
+          const { name, age, sex, users } = this.state;
+          users.push({
+            name,
+            age,
+            sex,
+          });
+          this.setState({ users, name: "", age: "", sex: "男" });
+          // 表单元素清空
+        };
+        getTextDatas = data => {
+          const keys = Object.keys(this.state);
+          const idx = keys.indexOf(data.type);
+          this.state[keys[idx]] = data.val;
+          this.forceUpdate();
+        };
+        render() {
+          const { children } = this.props;
+          return (
+            <div className="app">
+              <div className="form">
+                <div className="form-left">
+                  {/*左侧的form：2个输入框、1个单选框*/}
+                  <ComForm onsubmit={this.getFormDatas}>
+                    <ComInputText
+                      holder="输入姓名"
+                      title="姓名"
+                      type="name"
+                      value={this.state.name}
+                      onchange={this.getTextDatas}
+                    />
+                    <ComInputText
+                      holder="输入年龄"
+                      title="年龄"
+                      type="age"
+                      value={this.state.age}
+                      onchange={this.getTextDatas}
+                    />
+                    <ComInputRadio
+                      type="sex"
+                      onchange={this.getTextDatas}
+                      sex="男"
+                      value={this.state.sex}
+                      checked={this.state.sex == "男" ? true : false}
+                    />
+                    <ComInputRadio
+                      type="sex"
+                      value={this.state.sex}
+                      onchange={this.getTextDatas}
+                      sex="女"
+                      checked={this.state.sex == "女" ? true : false}
+                    />
+                  </ComForm>
+                </div>
+                <div className="form-right">{children[1]}</div>
+              </div>
+              <hr />
+              <div className="list">
+                <div className="list-left">
+                  {this.state.users.map((user, i) => (
+                    <ShowData key={i} user={user} />
+                  ))}
+                </div>
+                <div className="list-right"></div>
+              </div>
+            </div>
+          );
+        }
+      }
+      function ShowData(props) {
+        const { name, age, sex } = props.user;
+        return (
+          <p>
+            姓名:{name}, 年龄:{age}, 性别:{sex}
+          </p>
+        );
+      }
+      class ComInputText extends React.Component {
+        state = {
+          text: "",
+        };
+        setText(e) {
+          this.setState({ text: e.target.value });
+          this.props.onchange({ val: e.target.value, type: this.props.type });
+        }
+        render() {
+          const { title, holder, value } = this.props;
+          this.state.text = value;
+          return (
+            <div className="form-item">
+              <label htmlFor="#">{title}: </label>
+              <input
+                type="text"
+                placeholder={holder}
+                value={this.state.text}
+                onChange={this.setText.bind(this)}
+              />
+            </div>
+          );
+        }
+      }
+      function ComInputRadio(props) {
+        return (
+          <div className="form-item">
+            <label htmlFor="#">{props.sex}</label>
+            <input
+              type="radio"
+              checked={props.sex === props.value ? true : false}
+              name="sex"
+              value={props.sex}
+              onChange={e =>
+                props.onchange({ type: props.type, val: e.target.value })
+              }
+            />
+          </div>
+        );
+      }
+      function ComSelect(props) {
+        return <select>{props.children.map(com => com)}</select>;
+      }
+      function ComOption(props) {
+        return <option value={props.value}>{props.value}</option>;
+      }
+      class ComForm extends React.Component {
+        state = {};
+        addEvent(e) {
+          e.preventDefault();
+          this.props.onsubmit("123");
+        }
+        render() {
+          return (
+            <div className="form-container">
+              <form>
+                {this.props.children.map(com => com)}
+                <input
+                  type="submit"
+                  value="添加"
+                  onClick={this.addEvent.bind(this)}
+                />
+              </form>
+            </div>
+          );
+        }
+      }
+      let app = (
+        <App>
+          {/*右侧的form：1个输入框、1个单选框、1个下拉框*/}
+          <ComForm>
+            <ComInputText holder="输入姓名" title="姓名" />
+            <br />
+            <ComInputRadio sex="教师" checked={true} />
+            <ComInputRadio sex="IT" />
+            <ComInputRadio sex="公务员" />
+            <br />
+            <ComSelect>
+              <ComOption value="北京市" />
+              <ComOption value="郑州市" />
+              <ComOption value="南京市" />
+              <ComOption value="合肥市" />
+            </ComSelect>
+          </ComForm>
+        </App>
+      );
+      ReactDOM.render(app, document.getElementById("app"));
+    </script>
+  </body>
+</html>

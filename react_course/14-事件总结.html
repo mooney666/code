@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class Root extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            name: "小明",
+          };
+          // 给普通函数注入this指向.
+          this.newSetNameFour = this.setNameFour.bind(this);
+        }
+        render() {
+          return (
+            <div className="root">
+              <h4>Root组件</h4>
+              <p>姓名: {this.state.name}</p>
+              <button onClick={this.setName}>修改name1</button>
+              <button onClick={this.setNameTwo}>修改name2</button>
+              <button onClick={() => this.setName()}>修改name3</button>
+              <button onClick={(e) => this.setName(e)}>修改name4</button>
+              <button onClick={(e) => this.setNameThree(e, 1, "测试")}>
+                修改name5
+              </button>
+              <button onClick={this.newSetNameFour}>修改name6</button>
+              <button onClick={this.setNameFour.bind(this)}>修改name7</button>
+            </div>
+          );
+        }
+        setName(e) {
+          console.log(e);
+          console.log(this); // undefined this丢失
+          // this.setState({
+          //   name: "李四",
+          // });
+        }
+        setNameTwo = (e) => {
+          console.log(this);
+          this.setState({
+            name: "李四",
+          });
+        };
+        setNameThree = (e, num, str) => {
+          console.log(num, str);
+          this.setState({
+            name: str,
+          });
+        };
+        setNameFour() {
+          console.log(this);
+        }
+      }
+      ReactDOM.render(<Root />, document.getElementById("app"));
+
+      // 事件中this丢失的解决办法:
+      // 1. 声明的ES5事件函数换成ES6箭头函数;
+      // 2. 绑定事件时, 更换成onClick={() => this.setName()}; 此时声明事件函数使用ES5或ES6都可以;
+      // 3. 如果onClick绑定事件不用箭头函数, 声明事件也不用箭头函数; 可以使用bind解决;
+    </script>
+  </body>
+</html>

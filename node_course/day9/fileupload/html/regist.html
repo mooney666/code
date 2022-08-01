@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <input type="text" placeholder="输入name" id="name" />
+    <button id="regist">注册</button>
+    <script>
+      $("#regist").click(() => {
+        const uname = $("#name").val();
+        $.get(`http://localhost:9000/regist?name=${uname}`, (data) => {
+          if (data.status) {
+            localStorage.setItem("info", JSON.stringify(data.userInfo));
+            location.href = "./ajaxUpload.html";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

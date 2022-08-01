@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/layui@2.6.12/dist/css/layui.css"
+    />
+    <script src="./jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/layui@2.6.12/dist/layui.js"></script>
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        margin: 10px;
+      }
+      #model {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      // 弹出框组件
+      class Model extends React.Component {
+        state = {};
+        render() {
+          return (
+            <div id="model">
+              <form className="layui-form">
+                <div className="layui-form-item">
+                  <label className="layui-form-label">姓名</label>
+                  <div className="layui-input-block">
+                    <input
+                      type="text"
+                      name="title"
+                      required
+                      lay-verify="required"
+                      placeholder="请输入姓名"
+                      autoComplete="off"
+                      className="layui-input"
+                    />
+                  </div>
+                </div>
+                <div className="layui-form-item">
+                  <label className="layui-form-label">城市</label>
+                  <div className="layui-input-block">
+                    <select name="city" lay-verify="required">
+                      <option value=""></option>
+                      <option value="0">北京</option>
+                      <option value="1">上海</option>
+                      <option value="2">广州</option>
+                      <option value="3">深圳</option>
+                      <option value="4">杭州</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="layui-form-item">
+                  <label className="layui-form-label">爱好</label>
+                  <div className="layui-input-block">
+                    <input type="checkbox" name="like[write]" title="写作" />
+                    <input
+                      type="checkbox"
+                      name="like[read]"
+                      title="阅读"
+                      checked
+                    />
+                    <input type="checkbox" name="like[dai]" title="发呆" />
+                  </div>
+                </div>
+                <div className="layui-form-item">
+                  <label className="layui-form-label">性别</label>
+                  <div className="layui-input-block">
+                    <input type="radio" name="sex" value="男" title="男" />
+                    <input
+                      type="radio"
+                      name="sex"
+                      value="女"
+                      title="女"
+                      checked
+                    />
+                  </div>
+                </div>
+                <div className="layui-form-item layui-form-text">
+                  <label className="layui-form-label">介绍</label>
+                  <div className="layui-input-block">
+                    <textarea
+                      name="desc"
+                      placeholder="请输入一段个人简介"
+                      className="layui-textarea"
+                    ></textarea>
+                  </div>
+                </div>
+                <div className="layui-form-item">
+                  <div className="layui-input-block">
+                    <button
+                      className="layui-btn"
+                      lay-submit
+                      lay-filter="formDemo"
+                    >
+                      添加
+                    </button>
+                    <button
+                      type="reset"
+                      className="layui-btn layui-btn-primary"
+                    >
+                      重置
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          );
+        }
+      }
+
+      //
+      class App extends React.Component {
+        state = {
+          users: [],
+          nickname: "", // 姓名
+          cityname: "", // 城市
+          hobby: [], // 兴趣爱好
+          sex: "男", // 性别
+          desc: "", // 简介
+        };
+        id = 1; // 用户id
+        curUid = 0; // 当前编辑用户的id
+        clickType = "";
+        layer = null;
+        layerIndex = 0;
+        form = null;
+        resetControlComponentDatas() {
+          this.setState(() => {
+            return {
+              nickname: "",
+              desc: "",
+              hobby: [],
+              sex: "男",
+              cityname: "",
+            };
+          });
+        }
+        resetLayuiFormDatas(isReset, userInfo = {}) {
+          this.form.val("form", {
+            // form 即 class="layui-form" 所在元素<form>的 lay-filter="form" 对应的值
+            city: isReset ? "" : userInfo.cityname,
+            "hobby[write]": isReset
+              ? false
+              : userInfo.hobby.indexOf("写作") !== -1
+              ? true
+              : false,
+            "hobby[read]": isReset
+              ? false
+              : userInfo.hobby.indexOf("阅读") !== -1
+              ? true
+              : false,
+            "hobby[dai]": isReset
+              ? false
+              : userInfo.hobby.indexOf("发呆") !== -1
+              ? true
+              : false,
+            sex: isReset ? "男" : userInfo.sex,
+          });
+        }
+        nicknameEvent(e) {
+          this.setState({ nickname: e.target.value });
+        }
+        descEvent(e) {
+          this.setState({ desc: e.target.value });
+        }
+        showModel(isAdd = true) {
+          if (isAdd) {
+            this.clickType = "add";
+            this.resetLayuiFormDatas(true);
+            this.resetControlComponentDatas();
+          }
+          this.layerIndex = this.layer.open({
+            type: 1,
+            content: $("#model"), // 这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+          });
+        }
+        addEvent(e) {
+          e.preventDefault();
+          this.layer.close(this.layerIndex);
+          const { users, sex, hobby, nickname, desc, cityname } = this.state;
+          let newUsers = users;
+          newUsers.push({
+            id: this.id,
+            nickname,
+            sex,
+            hobby,
+            desc,
+            cityname,
+          });
+          this.setState({ users: newUsers });
+          this.resetControlComponentDatas();
+          this.resetLayuiFormDatas(true);
+          this.id++;
+        }
+        deleteUserEvent(uid) {
+          let users = this.state.users;
+          const idx = users.findIndex(user => user.id === uid);
+          users.splice(idx, 1);
+          this.setState({ users });
+        }
+        updateUserEvent(uid) {
+          this.curUid = uid;
+          this.clickType = "edit";
+          let users = this.state.users;
+          const idx = users.findIndex(user => user.id === uid);
+          const userInfo = users[idx];
+          this.setState({
+            nickname: userInfo.nickname,
+            desc: userInfo.desc,
+            hobby: userInfo.hobby,
+            sex: userInfo.sex,
+            cityname: userInfo.cityname,
+          });
+          this.resetLayuiFormDatas(false, userInfo);
+          this.showModel(false);
+        }
+        editCommitEvent(e) {
+          e.preventDefault();
+          this.layer.close(this.layerIndex);
+          let users = this.state.users;
+          const idx = users.findIndex(user => user.id === this.curUid);
+          users[idx] = {
+            id: this.curUid,
+            nickname: this.state.nickname,
+            desc: this.state.desc,
+            hobby: this.state.hobby,
+            sex: this.state.sex,
+            cityname: this.state.cityname,
+          };
+          this.setState({ users });
+        }
+        render() {
+          const { users, sex, hobby, nickname, desc, cityname } = this.state;
+          return (
+            <div className="app">
+              <button
+                type="button"
+                className="layui-btn"
+                onClick={this.showModel.bind(this)}
+              >
+                添加
+              </button>
+              <hr />
+              <div className="datas">
+                {users.length ? (
+                  <table className="layui-table">
+                    <colgroup>
+                      <col width="150" />
+                      <col width="200" />
+                      <col />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th>昵称</th>
+                        <th>城市</th>
+                        <th>爱好</th>
+                        <th>性别</th>
+                        <th>简介</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map(user => (
+                        <tr key={user.id}>
+                          <td>{user.nickname}</td>
+                          <td>{user.cityname}</td>
+                          <td>{user.hobby.join(";")}</td>
+                          <td>{user.sex}</td>
+                          <td>{user.desc}</td>
+                          <td>
+                            <button
+                              type="button"
+                              className="layui-btn layui-btn-xs"
+                              onClick={() => this.deleteUserEvent(user.id)}
+                            >
+                              删除
+                            </button>
+                            <button
+                              type="button"
+                              className="layui-btn layui-btn-xs"
+                              onClick={() => this.updateUserEvent(user.id)}
+                            >
+                              编辑
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <h3>暂时没有数据, 先添加数据!</h3>
+                )}
+              </div>
+              <div id="model">
+                <form className="layui-form" lay-filter="form">
+                  <div className="layui-form-item">
+                    <label className="layui-form-label">姓名</label>
+                    <div className="layui-input-block">
+                      <input
+                        value={nickname}
+                        onChange={this.nicknameEvent.bind(this)}
+                        type="text"
+                        name="title"
+                        required
+                        lay-verify="required"
+                        placeholder="请输入姓名"
+                        autoComplete="off"
+                        className="layui-input"
+                      />
+                    </div>
+                  </div>
+                  <div className="layui-form-item">
+                    <label className="layui-form-label">城市1</label>
+                    <div className="layui-input-block">
+                      <select
+                        lay-filter="city"
+                        name="city"
+                        lay-verify="required"
+                      >
+                        <option value=""></option>
+                        <option value="北京">北京</option>
+                        <option value="上海">上海</option>
+                        <option value="广州">广州</option>
+                        <option value="深圳">深圳</option>
+                        <option value="杭州">杭州</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="layui-form-item">
+                    <label className="layui-form-label">城市2</label>
+                    <div className="layui-input-block">
+                      <select
+                        lay-filter="city2"
+                        name="city"
+                        lay-verify="required"
+                      >
+                        <option value=""></option>
+                        <option value="0">北京</option>
+                        <option value="1">上海</option>
+                        <option value="2">广州</option>
+                        <option value="3">深圳</option>
+                        <option value="4">杭州</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="layui-form-item">
+                    <label className="layui-form-label">爱好</label>
+                    <div className="layui-input-block">
+                      <input
+                        value="写作"
+                        type="checkbox"
+                        name="hobby[write]"
+                        title="写作"
+                      />
+                      <input
+                        value="阅读"
+                        type="checkbox"
+                        name="hobby[read]"
+                        title="阅读"
+                      />
+                      <input
+                        value="发呆"
+                        type="checkbox"
+                        name="hobby[dai]"
+                        title="发呆"
+                      />
+                    </div>
+                  </div>
+                  <div className="layui-form-item">
+                    <label className="layui-form-label">性别</label>
+                    <div className="layui-input-block">
+                      <input
+                        defaultChecked
+                        type="radio"
+                        name="sex"
+                        value="男"
+                        title="男"
+                      />
+                      <input type="radio" name="sex" value="女" title="女" />
+                    </div>
+                  </div>
+                  <div className="layui-form-item layui-form-text">
+                    <label className="layui-form-label">介绍</label>
+                    <div className="layui-input-block">
+                      <textarea
+                        value={desc}
+                        onChange={this.descEvent.bind(this)}
+                        name="desc"
+                        placeholder="请输入一段个人简介"
+                        className="layui-textarea"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="layui-form-item">
+                    <div className="layui-input-block">
+                      <button
+                        className="layui-btn"
+                        lay-filter="formDemo"
+                        onClick={
+                          this.clickType === "add"
+                            ? this.addEvent.bind(this)
+                            : e => this.editCommitEvent(e)
+                        }
+                      >
+                        {this.clickType === "add" ? "添加" : "修改"}
+                      </button>
+                      <button
+                        type="reset"
+                        className="layui-btn layui-btn-primary"
+                      >
+                        重置
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          );
+        }
+        componentDidMount() {
+          const _self = this;
+          // 注册layer模块
+          layui.use("layer", function () {
+            _self.layer = layui.layer;
+          });
+          // 注册form模块
+          layui.use("form", function () {
+            _self.form = layui.form;
+            //各种基于事件的操作，下面会有进一步介绍
+            _self.form.on("select(city)", function ({ value }) {
+              _self.setState({ cityname: value });
+            });
+
+            _self.form.on("checkbox", function (data) {
+              const isCheck = data.elem.checked; //是否被选中，true或者false
+              const val = data.value; //复选框value值，也可以通过data.elem.value得到
+              let hobby = [..._self.state.hobby];
+              if (isCheck) hobby.push(val);
+              else {
+                const idx = hobby.indexOf(val);
+                if (idx !== -1) hobby.splice(idx, 1);
+              }
+              _self.setState({ hobby });
+            });
+
+            _self.form.on("radio", function (data) {
+              _self.setState({ sex: data.value });
+            });
+          });
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+<view class="musics">
+  <view bindtap="musicEvent" data-idx="{{index}}" class="music" wx:for="{{musicLists}}" wx:key="index">{{item.name}}</view>
+  <view class="player">
+    <text class="curTime">{{current_time}}</text>
+    <slider bindchanging="dragingEvent" bindchange="dragEvent" class="slider" value="{{slider_value}}"></slider>
+    <text class="totalTime">{{total_time}}</text>
+  </view>
+</view>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+
+  <body>
+    <script>
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/login",
+        data: JSON.stringify({ name: "admin", pwd: "admin" }), // 由于是JSON数据，比较特殊，默认jquery把它当作 application/x-www-form-urlencoded 这种格式处理了，处理结果不正确，后端无法正常解析参数。
+        contentType: "application/json",
+        success: function (data) {
+          console.log("res: ", data);
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      class SonCom extends React.Component {
+        state = {
+          sname: "小明",
+        };
+        render() {
+          return (
+            <div className="son-com">
+              <h3>子组件1: {this.state.sname}</h3>
+              <button onClick={() => this.props.func(this.state.sname)}>
+                传值
+              </button>
+              <button
+                onClick={() =>
+                  this.setState({
+                    sname: "小红",
+                  })
+                }
+              >
+                修改
+              </button>
+            </div>
+          );
+        }
+      }
+      class ParentCom extends React.Component {
+        state = {
+          pname: "",
+        };
+        saveData(new_name) {
+          console.log("---", new_name);
+          this.setState({
+            pname: new_name,
+          });
+        }
+        render() {
+          return (
+            <div className="parent-com">
+              <h3>父组件: {this.state.pname}</h3>
+              <hr />
+              <SonCom func={this.saveData.bind(this)}></SonCom>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<ParentCom />, document.getElementById("app"));
+
+      /*
+      单向数据流：它指的是state数据从父组件中通过prop层层往内部的子组件传递的过程，这种自上而下的数据流动就称为单项数据流。因为state数据是类组件私有的，其它组件无法访问，所以只能通过prop向下传递。
+      对于子组件向父组件传值，就不能使用props了，只能通过自定义事件传值。
+      子组件向父组件传值：
+      1. 父组件提前声明函数，准备接收子组件传值；
+      2. 父组件通过prop将这个函数传递到子组件中；
+      3. 子组件在触发点击事件的时候，通过this.props.xxx调用父组件传过来的函数，实现传值；
+      4. 父组件收到传值后，调用setState将数据保存到state中，父组件就可以用这个数据了；
+      */
+    </script>
+  </body>
+</html>

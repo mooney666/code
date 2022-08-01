@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>form表单上传文件</title>
+  </head>
+  <body>
+    <!-- enctype: form标签的属性，用于指定MIME TYPE，也就是请求携带的内容类型。multipart/form-data表示：文件、二进制数据、非ASCII数据。 -->
+    <h3>单文件上传</h3>
+    <form
+      action="http://localhost:9000/fileupload"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <!-- accept: 设置预选项，在选择文件的弹出框中可以预先根据accept设置的MIME选中对应类型的文件。它并不能阻止用户最终的选则。*/*表示所有文件 -->
+      <input type="file" name="filecontent" accept="text/plain" />
+      <input type="submit" value="上传" />
+    </form>
+    <hr />
+    <h3>多文件上传</h3>
+    <!-- <form
+      action="http://localhost:9000/filesupload"
+      method="post"
+      enctype="multipart/form-data"
+    > -->
+    <form
+      action="http://localhost:9000/testErr"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <!-- multiple 该属性支持选择多个文件 -->
+      <input type="file" name="course" multiple accept="text/plain" />
+      <input type="submit" value="上传" />
+    </form>
+  </body>
+</html>

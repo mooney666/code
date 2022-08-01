@@ -1,0 +1,5 @@
+1. 什么是回调地狱。产生的原因是什么。
+2. promise的作用。
+3. promise中resolve()的作用和执行时机。.then()和resolve()的关系。
+4. .then() 特点和返回值。
+5. Promise.all() 和 Promise.race()。

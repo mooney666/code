@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      /*
+      // 普通写法：没有使用状态提升。
+      class MInput extends React.Component {
+        state = {
+          m: "0",
+        };
+        changeM(e) {
+          this.setState({ m: e.target.value });
+          this.props.setm(e.target.value);
+        }
+        render() {
+          this.state.m = this.props.m;
+          return (
+            <div className="inp">
+              <label htmlFor="#">米: </label>
+              <input
+                type="text"
+                value={this.state.m}
+                onChange={this.changeM.bind(this)}
+              />
+            </div>
+          );
+        }
+      }
+      class CMInput extends React.Component {
+        state = {
+          cm: "0",
+        };
+        changeCM(e) {
+          this.setState({ cm: e.target.value });
+          this.props.setcm(e.target.value);
+        }
+        render() {
+          this.state.cm = this.props.cm;
+          return (
+            <div className="inp">
+              <label htmlFor="#">厘米: </label>
+              <input
+                type="text"
+                value={this.state.cm}
+                onChange={this.changeCM.bind(this)}
+              />
+            </div>
+          );
+        }
+      }
+
+      class App extends React.Component {
+        state = {
+          m: "0",
+          cm: "0",
+        };
+        setM(val) {
+          this.setState({ m: val, cm: val * 100 });
+        }
+        setCM(val) {
+          this.setState({ cm: val, m: val / 100 });
+        }
+        render() {
+          const { m, cm } = this.state;
+          return (
+            <div className="app">
+              <MInput m={cm / 100} setm={this.setM.bind(this)} />
+              <CMInput cm={m * 100} setcm={this.setCM.bind(this)} />
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+      */
+
+      class MInput extends React.Component {
+        render() {
+          return (
+            <div className="inp">
+              <label htmlFor="#">米: </label>
+              <input
+                type="text"
+                value={this.props.m}
+                onChange={e => this.props.setm(e.target.value)}
+              />
+            </div>
+          );
+        }
+      }
+      class CMInput extends React.Component {
+        render() {
+          return (
+            <div className="inp">
+              <label htmlFor="#">厘米: </label>
+              <input
+                type="text"
+                value={this.props.cm}
+                onChange={e => this.props.setcm(e.target.value)}
+              />
+            </div>
+          );
+        }
+      }
+
+      class App extends React.Component {
+        state = {
+          m: "0",
+          cm: "0",
+        };
+        setM(val) {
+          this.setState({ m: val });
+        }
+        setCM(val) {
+          this.setState({ cm: val, m: val / 100 });
+        }
+        render() {
+          const { m, cm } = this.state;
+          return (
+            <div className="app">
+              <MInput m={m} setm={this.setM.bind(this)} />
+              <CMInput cm={m * 100} setcm={this.setCM.bind(this)} />
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+
+      // 状态提升：
+      // 它是将多个拥有共享数据状态的组件数据，共同提升到父组件中，可以解决单个组件中，私有数据state和props数据同时存在的冲突问题。
+
+      // 问题：
+      // 1. 将 MInput 和 CMInput 两个相同类型的组件，合成一个公共组件。
+      // 2. 通过状态提升实现 米1-分米10-厘米100 的单位转化。
+    </script>
+  </body>
+</html>

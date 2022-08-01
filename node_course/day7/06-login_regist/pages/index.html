@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      // let status = localStorage.getItem("login_status");
+      let status = localStorage.getItem("nickname");
+      if (!status) {
+        // status为undefined时，说明没有登录
+        $.ajax({
+          url: "/checkLogin",
+          method: "GET",
+          async: false, // 将ajax设置为同步请求，希望ajax可以阻塞页面加载
+          success: function (data) {
+            if (!data.status) {
+              location.href = "./login.html";
+            }
+          },
+        });
+      }
+    </script>
+    <title>首页</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      ul {
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      li {
+        width: 140px;
+      }
+      .main {
+        width: 800px;
+        margin: 0 auto;
+        background-color: lightblue;
+        padding: 30px 0;
+      }
+      h3 {
+        text-align: center;
+      }
+      img {
+        width: 120px;
+      }
+      p {
+        text-align: center;
+      }
+      .page {
+        height: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .userinfo {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <h3>歌手列表</h3>
+      <div class="userinfo"></div>
+      <div class="page">
+        <button class="prev">上一页</button>
+        <button class="next">下一页</button>
+      </div>
+      <ul></ul>
+    </div>
+    <script>
+      $(".userinfo").text(`欢迎，${localStorage.getItem("nickname")}`);
+      let isFirstPage = true; // 记录是否是第一页列表
+      let more = true; // 记录是否有下一页
+      let offset = 0;
+      let limit = 10;
+      function getList() {
+        $("ul").html("");
+        if (isFirstPage) $(".prev").prop("disabled", true);
+        else $(".prev").prop("disabled", false);
+        $.get(
+          `https://autumnfish.cn/top/artists?offset=${offset}&limit=${limit}`,
+          (data) => {
+            more = data.more;
+            data.artists.forEach((obj, i) => {
+              // $(
+              //   `<li><img src="/loading.gif" /><p>${obj.name}</p></li>`
+              // ).appendTo($("ul"));
+              let li = document.createElement("li");
+
+              let loadingImg = document.createElement("img");
+              loadingImg.src = "/loading.gif";
+              li.append(loadingImg);
+
+              let p = document.createElement("p");
+              p.innerText = obj.name;
+              li.append(p);
+
+              $("ul").append($(li));
+
+              // 图片预加载技术：解决网络图片加载慢的情况，可以让页面临时显示一个占位符图片，通过new Image()这种方式去加载真实图片资源，真实图片加载完毕，将占位符图片移除。
+              let img = new Image(); // 创建img图片对象
+              img.onload = () => {
+                // onload：图片资源加载完毕之后会执行
+                // 1. 先将展示占位符图片的img移除掉。
+                $(loadingImg).remove();
+                $(li).append($(img));
+              };
+              img.src = obj.picUrl; // 用src加载真实图片地址
+            });
+          }
+        );
+      }
+      getList();
+
+      $(".next").click(() => {
+        if (more) {
+          $(".next").prop("disabled", false);
+          offset += 10;
+          isFirstPage = false;
+          getList();
+        } else $(".next").prop("disabled", true);
+      });
+
+      $(".prev").click(() => {
+        offset -= 10;
+        if (offset == 0) isFirstPage = true;
+        getList();
+      });
+
+      $(".userinfo").click(() => {
+        // 1. 清空localStorage
+        localStorage.clear();
+        $.get("/logout", (data) => {
+          if (data.status) location.href = "/login.html";
+        });
+      });
+    </script>
+  </body>
+</html>

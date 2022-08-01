@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script type="text/babel">
+      // Props 的只读性:
+      // 组件无论是使用函数声明还是通过 class 声明，都决不能修改自身的 props。它有一个严格的规则：所有 React 组件都必须像纯函数一样保护它们的 props 不被更改。
+      function Com(props) {
+        // Uncaught TypeError: Cannot assign to read only property 'name' of object '#<Object>'
+        // props.name = "admin";
+        // 函数内部一定返回组件模板.
+        return (
+          <div className="com">
+            <h3>Com组件</h3>
+            {/*如果组件加载时<Com />, 没有传递prop, 默认props是空, 不会报错.*/}
+            <p>
+              姓名:{props.name}, 年龄:{props.age}
+            </p>
+          </div>
+        );
+      }
+      ReactDOM.render(
+        <Com name="小王" age="22" />,
+        document.getElementById("main")
+      );
+    </script>
+  </body>
+</html>

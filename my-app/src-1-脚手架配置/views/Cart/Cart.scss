@@ -1,0 +1,67 @@
+// @import url("../../basestyles/common.scss"); // 只能使用样式，内部的变量无法使用。
+
+@import "../../basestyles/common.scss"; // 样式和变量都可以使用
+
+$border-width: 1px;
+$border-color: yellow;
+$border-style: $border-width solid $border-color;
+$width: 20px;
+$theme-color: "pink";
+
+// 通过@mixin定义混入器，标签内部通过 @include rounded-corners导入样式。
+@mixin rounded-corners {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+// 带有选择器的mixin混入
+@mixin no-bullets {
+  list-style: none; // 这个样式会在父元素生成
+  border: 3px solid blue;// 这个样式会在父元素生成
+  li {
+    list-style-image: none;
+    list-style-type: none;
+    margin-left: 0px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+  }
+}
+
+.Cart {
+  > h3 {
+    border: $border-style;
+    &:hover {
+      background-color: blue;
+    }
+    height: $height;
+    background-color: $bgc;
+  }
+  p {
+    @include rounded-corners;
+    // border: $border_style;
+    border: 2px dashed $border-color;
+    font-size: $width/5; // 4px(20px/5px=4 没有px单位了)
+    height: $width + 100px; // 120px
+    background-color: $bgc;
+  }
+  .dd > p {
+    @import url("../../basestyles/common.scss"); // 局部导入样式
+    @include rounded-corners;
+  }
+  ul {
+    @include no-bullets;
+  }
+  .pp {
+    @if $theme-color=="drak" {
+      background-color: black;
+      color: white;
+    } @else if $theme-color == "pink" {
+      background-color: orange;
+      color: black;
+    } @else {
+      background-color: transparent;
+    }
+  }
+}

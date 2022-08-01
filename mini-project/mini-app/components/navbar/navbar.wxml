@@ -1,0 +1,5 @@
+<!--components/navbar/navbar.wxml-->
+<view class="bar">
+  <text>{{title}}</text>
+  <input type="text" bindinput="changeEvent" />
+</view>

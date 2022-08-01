@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./axios.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // Promise 出现的原因？异步编程的解决方案(解决回调地狱问题)。
+      // 传统解决异步任务的先后顺序问题，通过ajax的嵌套解决请求的顺序。
+      // 场景：IP定位 -> 行政区域查询 -> 获取天气。
+      // 同步任务特点：1. 多个任务之间没有嵌套关系；2. 任务之间的等待；
+      // 多个异步任务要保证先后顺序，就是解决上述两个问题；
+      // function sum(a, b) {
+      //   return a + b;
+      // }
+      // let s1 = sum(10, 10);
+      // let s2 = sum(10, 10);
+      // let s3 = sum(10, 10);
+
+      /*
+      // Promise基本用法
+      let p1 = new Promise((resolve, reject) => {
+        console.log("立刻执行");
+        axios({
+          url: "https://www.lanqb.com/api/course/video/indexv3?type=1&page=1&limit=20",
+        }).then((data) => {
+          resolve(data.data); // 就是在Promise任务成功之后，向外返回任务的结果
+        });
+      });
+      p1.then((data) => {
+        console.log("--------", data);
+      });
+      */
+
+      // Promise封装请求，解决嵌套和任务等待.
+      function axiosApi(page) {
+        return new Promise((resolve, reject) => {
+          axios({
+            url: `https://www.lanqb.com/api/course/video/indexv3?type=1&page=${page}&limit=20`,
+          }).then(({ data }) => {
+            resolve(data);
+          });
+        });
+      }
+
+      /*
+      // 并列的异步任务，无法保证执行顺序。
+      let p1 = axiosApi(1);
+      p1.then((data) => {
+        console.log("----1", data.data);
+      });
+      let p2 = axiosApi(2);
+      p2.then((data) => {
+        console.log("----2", data.data);
+      });
+      let p3 = axiosApi(3);
+      p3.then((data) => {
+        console.log("----3", data.data);
+      });
+      */
+
+      /*
+      // 利用Promise形成初步的异步任务封装。
+      let p1 = axiosApi(1);
+      let p2 = p1.then(data => {
+        console.log("-----1", data.data);
+        return axiosApi(2); // return 新的Promise(新的任务)
+      });
+      let p3 = p2.then(data => {
+        console.log("-----2", data.data);
+        return axiosApi(3);
+      })
+      p3.then(data => {
+        console.log("-----3", data.data);
+      })
+      */
+
+      /*
+      // Promise最终的形态，解决了嵌套和等待两个问题。
+      axiosApi(1)
+        .then((data) => {
+          console.log("----1", data.data);
+          return axiosApi(2);
+        })
+        .then((data) => {
+          console.log("----2", data.data);
+          return axiosApi(3);
+        })
+        .then((data) => {
+          console.log("----3", data.data);
+        });
+        */
+
+      // async + await 解决Promise同步化代码的问题。
+      async function axiosAPI(page) {
+        // return "测试"; // async 内部使用return返回结果(必须是函数最外层)，这个结果会被下面的.then接收。
+
+        /*
+        axios({
+          url: `https://www.lanqb.com/api/course/video/indexv3?type=1&page=${page}&limit=20`,
+        }).then(({ data }) => {
+          // return data; // 这是不行的，下面的.then收不到数据。
+        });
+        */
+        // 被 await 修饰的异步任务， 可以在前面直接用变量接收。
+        // await会一直阻塞程序执行，直到后面的任务执行成功，代码会继续往下执行。
+        let data = await axios({
+          url: `https://www.lanqb.com/api/course/video/indexv3?type=1&page=${page}&limit=20`,
+        });
+        return data; // 这个return 的数据，是供.then接收数据使用的，并不是当前函数的返回值了。
+      }
+
+      // let p4 = axiosAPI(1);
+      // // console.log(p4);
+      // p4.then((res) => {
+      //   console.log("------1", res.data.data);
+      // });
+
+      // 遗留问题：如何利用async+await实现最终的异步任务同步化效果。
+      /*
+      axiosAPI(1)
+        .then((res) => {
+          console.log("------1", res.data.data);
+          return axiosAPI(2);
+        })
+        .then((res1) => {
+          console.log("------2", res.data.data);
+          return axiosAPI(3);
+        });
+        */
+      async function getData() {
+        let res1 = await axiosAPI(1);
+        console.log("++++++1", res1);
+        let res2 = await axiosAPI(2);
+        console.log("++++++2", res2);
+        let res3 = await axiosAPI(3);
+        console.log("++++++3", res3);
+      }
+      getData();
+
+      // 异步任务同步化终极形态：
+      // 1. 使用async+await封装请求函数；
+      // 2. 使用async+await执行请求任务；
+
+      // 不使用async+await的终极形态：
+      // 1. 使用new Promise()封装请求函数；
+      // 2. 连续的.then()执行请求任务；
+    </script>
+  </body>
+</html>

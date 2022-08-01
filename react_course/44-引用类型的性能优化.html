@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      /*
+      对于复杂数据类型优化：
+      1. 如果引用数据类型的结构比较简单，可以借助于 {...this.state.user} 生成新对象；也可以借助于 JSON.parse(JSON.stringify(this.state.user)) 生成新对象； PureComponent和shouldComponentUpdate 都会正确识别对象是否发生变化。
+      2. 这种展开运算符或者JSON的方式，对于修改后的数据和初始数据一致的情况，无法优化，也会render。毕竟是通过生成新对象的方式解决组件不渲染的问题的。
+      3. 如果是嵌套比较复杂，可以借助于Immutable不可变对象优化组件渲染。
+      */
+      class App extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            user: {
+              name: "小明",
+              other: {
+                address: "郑州市",
+              },
+            },
+          };
+        }
+        shouldComponentUpdate(nextProps, nextState) {
+          // 对于 复杂数据类型/引用类型，=== 是判断两个对象的内存地址是否一致，内存地址一致就是同一个对象，返回true; 内存地址不一样就说明不是同一个对象，返回false;
+          console.log(nextState.user === this.state.user);
+          if (nextState.user !== this.state.user) {
+            console.log("对象不一样，需要render");
+            return true;
+          }
+          console.log("数据一样，不需要render");
+          return false;
+        }
+        render() {
+          console.log("app render() 了");
+          return (
+            <div className="app">
+              <h3>App组件</h3>
+              <p>{JSON.stringify(this.state.user)}</p>
+              <button
+                onClick={() => {
+                  /*
+                  let user = { ...this.state.user };
+                  user.name = "小红";
+                  user.other.address = "南阳市";
+                  this.setState({ user });
+                  */
+
+                  let user = JSON.parse(JSON.stringify(this.state.user));
+                  user.name = "小明";
+                  user.other.address = "郑州市";
+                  this.setState({ user });
+                }}
+              >
+                设置user
+              </button>
+              <hr />
+              <Son />
+            </div>
+          );
+        }
+      }
+      class Son extends React.PureComponent {
+        constructor() {
+          super();
+          this.state = {
+            sname: "小明",
+          };
+        }
+        render() {
+          console.log("son render() 了");
+          return (
+            <div className="son">
+              <h3>Son组件</h3>
+              <p>sname: {this.state.sname}</p>
+              <button
+                onClick={() => this.setState({ sname: this.state.sname + "1" })}
+              >
+                设置sname
+              </button>
+              <p>接收传值: {this.props.tt}</p>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

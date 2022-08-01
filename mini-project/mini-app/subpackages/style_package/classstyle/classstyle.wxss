@@ -1,0 +1,29 @@
+.view {
+  width: 200rpx;
+  height: 200rpx;
+  background-color: lightblue;
+}
+.blue {
+  background-color: blue;
+}
+.red {
+  background-color: red;
+}
+.black {
+  background-color: black;
+}
+.border {
+  border: 2rpx solid yellow;
+}
+.color {
+  color: orange;
+}
+.fontsize {
+  font-size: 40rpx;
+}
+.search {
+  border: 2rpx solid lightblue;
+  border-radius: 20rpx;
+  width: 300rpx;
+  padding-left: 20rpx;
+}

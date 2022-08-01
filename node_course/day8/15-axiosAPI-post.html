@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script src="./axios.js"></script>
+    <script>
+      // 1. 通过选项传递参数，默认传递的是 json 格式的数据
+      axios
+        .post("http://localhost:8080/test5", {
+          name: "小明",
+          age: 22,
+        })
+        .then(({ data }) => {
+          console.log(data);
+        });
+
+      // POST 请求和PUT 请求还可以支持data参数，GET/DELETE支持params参数。
+      axios
+        .post("http://localhost:8080/test5", {
+          data: {
+            name: "小明11",
+            age: 33,
+          },
+        })
+        .then(({ data }) => {
+          console.log(data);
+        });
+    </script>
+  </body>
+</html>

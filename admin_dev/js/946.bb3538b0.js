@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkweb_admin"]=self["webpackChunkweb_admin"]||[]).push([[946],{7946:function(e,n,t){t.r(n),t.d(n,{default:function(){return r}});var u=t(3396),a=t(65),c={setup(e){let n=(0,a.oR)();return n.commit("changeNavList",[]),(e,n)=>((0,u.wg)(),(0,u.iD)("h1",null," 首页 "))}};const i=c;var r=i}}]);
+//# sourceMappingURL=946.bb3538b0.js.map

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./layui.css" />
+    <script src="./jquery-3.6.0.min.js"></script>
+    <script src="./layui.js"></script>
+    <script src="./react17.development.js"></script>
+    <script src="./react-dom17.development.js"></script>
+    <script src="./babel.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #root {
+        width: 1200px;
+        min-height: 100vh;
+        margin: 0 auto;
+        background-color: lightblue;
+      }
+      .nav {
+        margin-right: 10px;
+        color: #999999;
+      }
+      .cates_links {
+        height: 60px;
+        color: #999;
+        font-size: 18px;
+        line-height: 60px;
+      }
+      .cates_links > a {
+        margin-right: 20px;
+        position: relative;
+      }
+      .cates_links > a:hover {
+        color: #027cdb;
+      }
+      .cates_links > a.cates_active {
+        color: #027cdb;
+      }
+      .cates_links > a.cates_active::after {
+        content: "";
+        width: 25px;
+        height: 2px;
+        background-color: #027cdb;
+        position: absolute;
+        top: 25px;
+        left: 50%;
+        margin-left: -14px;
+      }
+      .rec {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .rec > div:not(.change_btn) {
+        width: 220px;
+        height: 270px;
+        background-size: 130% 100%;
+        background-position-x: -100px;
+        background-repeat: no-repeat;
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+      .rec img {
+        width: 100%;
+      }
+      .change_btn {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .zy {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .loading {
+        font-size: 20px;
+      }
+      .zy > .zy_lists {
+        position: relative;
+        width: 220px;
+        height: 270px;
+        margin-bottom: 10px;
+      }
+      .zy_lists > div {
+        height: 100%;
+        width: 100%;
+      }
+      .zy_lists .zy_study {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        color: white;
+      }
+      .zy_lists .zy_bgc {
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 100%;
+      }
+      .pagi {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .zy-cates-list {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 80px;
+      }
+      .zy-cates-list a {
+        font-size: 18px;
+        text-decoration: none;
+        color: black;
+      }
+      .zy-cates-list a:hover {
+        color: #027cdb;
+      }
+    </style>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      let layPage = null;
+      async function ajax(url) {
+        const data = await fetch(url)
+          .then(response => response.json())
+          .then(data => data);
+        return data;
+      }
+
+      // 推荐组件
+      class Rec extends React.Component {
+        state = {
+          recommends: [],
+        };
+        getDataRandom = async () => {
+          let data = await ajax(
+            "https://www.lanqb.com/school/stu-work/lists?sort=-top_weight,-created_at&to_top=1&limit=25&random=1&page=1"
+          );
+          this.setState(() => {
+            return {
+              recommends: data.data,
+            };
+          });
+        };
+        render() {
+          const { recommends } = this.state;
+          return (
+            <div className="rec">
+              {recommends.map(r => {
+                return (
+                  <div
+                    key={r.id}
+                    className="rec_item"
+                    style={{
+                      backgroundImage: `url(https://ss.lanqb.com/${r.work_url}?imageView2/1/w/440/h/560/format/webp)`,
+                    }}
+                  >
+                    {/*<img src={`https://ss.lanqb.com/${r.work_url}`} alt="" />*/}
+                  </div>
+                );
+              })}
+              <div className="change_btn">
+                <button
+                  type="button"
+                  className="layui-btn"
+                  onClick={this.getDataRandom}
+                >
+                  换一换
+                </button>
+              </div>
+            </div>
+          );
+        }
+        async componentDidMount() {
+          this.getDataRandom();
+        }
+      }
+      function ZYCommonCom(props) {
+        return (
+          <div>
+            {props.month && (
+              <div className="zy_study">{props.month}个月学习成果</div>
+            )}
+            {props.grade && <div className="zy_study">{props.grade}</div>}
+            <div
+              className="zy_bgc"
+              style={{
+                backgroundImage: `url(https://ss.lanqb.com/${props.url}?imageView2/1/w/440/h/560/format/webp)`,
+              }}
+            ></div>
+          </div>
+        );
+      }
+      class ZYCom extends React.Component {
+        state = {
+          lists: [],
+          meta: {},
+        };
+        mapUrls = {
+          1: {
+            url: "https://www.lanqb.com/school/stu-work/lists?sort=-top_weight,-created_at&limit=25&page=",
+            id: "stu-work",
+          },
+          2: {
+            url: "https://www.lanqb.com/api/community/homework?limit=25&page=",
+            id: "homework",
+          },
+          3: {
+            url: "https://www.lanqb.com/api/community/growth?limit=24&page=",
+            id: "stu-work",
+          },
+          4: {
+            url: "https://www.lanqb.com/api/community/subject/21?page=",
+            id: "subject",
+          },
+        };
+
+        curUrl = "";
+        curId = "";
+        getDataLists = async (url, id, page = 1) => {
+          const data = await ajax(url + page);
+          let paginateDatas = id === "stu-work" ? data.meta : data.paginate;
+          this.setState({
+            lists: data.data,
+            meta: paginateDatas,
+          });
+        };
+        changeZYCates = async idx => {
+          this.curUrl = this.mapUrls[idx].url;
+          this.curId = this.mapUrls[idx].id;
+          this.setState({
+            lists: [],
+          });
+          await this.getDataLists(this.curUrl, this.curId);
+          this.renderPagination();
+        };
+        renderPagination() {
+          //执行一个laypage实例
+          layPage.render({
+            elem: "pagination", //注意，这里的 pagination 是 ID，不用加 # 号
+            count: this.state.meta.total, //数据总数，从服务端得到
+            limit: this.state.meta.per_page, // 每页显示个数
+            jump: (obj, first) => {
+              // obj包含了当前分页的所有参数
+              // first 是否为首次加载，是首次加载值为true；不是首次加载值为undefined。平时可以用来区分首次渲染是否需要执行jump()函数。
+              if (!first) {
+                this.setState({
+                  lists: [],
+                });
+                console.log(this.curUrl, this.curId);
+                this.getDataLists(this.curUrl, this.curId, obj.curr);
+              }
+            },
+          });
+        }
+        render() {
+          const { lists } = this.state;
+          return (
+            <div className="zy-root">
+              <div className="zy-cates-list">
+                <a href="#" onClick={() => this.changeZYCates("1")}>
+                  学习成果
+                </a>
+                <a href="#" onClick={() => this.changeZYCates("2")}>
+                  学员作业
+                </a>
+                <a href="#" onClick={() => this.changeZYCates("3")}>
+                  学员成长记录
+                </a>
+                <a href="#" onClick={() => this.changeZYCates("4")}>
+                  专业辅导过程
+                </a>
+              </div>
+              <div
+                className="zy"
+                style={{
+                  justifyContent: lists.length ? "space-between" : "center",
+                }}
+              >
+                {lists.length === 0 ? (
+                  <div className="loading">加载中...</div>
+                ) : (
+                  lists.map(zy => {
+                    return (
+                      <div key={zy.id} className="zy_lists">
+                        <ZYCommonCom
+                          url={zy.work_url ? zy.work_url : zy.works.url}
+                          month={zy.study_month ? zy.study_month : ""}
+                          grade={zy.app_work_grade ? zy.app_work_grade : ""}
+                        />
+                      </div>
+                    );
+                  })
+                )}
+                <div className="pagi">
+                  <div
+                    id="pagination"
+                    style={{ display: lists.length ? "block" : "none" }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+        async componentDidMount() {
+          // componentDidMount 这个钩子是虚拟DOM被渲染为真实DOM以后，才会执行，在这里可以获取到真实DOM。它只在首次加载才会调用。
+          this.curUrl = this.mapUrls["1"].url;
+          this.curId = this.mapUrls["1"].id;
+          await this.getDataLists(this.curUrl, this.curId);
+          layui.use("laypage", () => {
+            layPage = layui.laypage;
+            this.renderPagination();
+          });
+        }
+      }
+      // TODO: 问答组件
+      class WDCom extends React.Component {
+        render() {
+          return (
+            <div className="wd">
+              <h4>问答组件</h4>
+            </div>
+          );
+        }
+      }
+      // TODO: 作品组件
+      class ZPCom extends React.Component {
+        render() {
+          return (
+            <div className="zp">
+              <h4>作品组件</h4>
+            </div>
+          );
+        }
+      }
+      // TODO: 指绘组件
+      class ZHCom extends React.Component {
+        render() {
+          return (
+            <div className="zh">
+              <h4>指绘组件</h4>
+            </div>
+          );
+        }
+      }
+
+      // 根组件
+      class App extends React.Component {
+        state = {
+          cates_type: "recommend",
+        };
+        mapSources = {
+          recommend: { comName: <Rec />, title: "推荐" },
+          zy: { comName: <ZYCom />, title: "作页" },
+          wd: { comName: <WDCom />, title: "问答" },
+          zp: { comName: <ZPCom />, title: "作品" },
+          zh: { comName: <ZHCom />, title: "指绘" },
+        };
+        changeCatesType = type => {
+          this.setState(() => {
+            return {
+              cates_type: type,
+            };
+          });
+        };
+        render() {
+          const { cates_type } = this.state;
+          let main_compoent = this.mapSources[cates_type].comName;
+          let menu_title = this.mapSources[cates_type].title;
+          return (
+            <div id="root">
+              {/*面包屑导航*/}
+              <div className="menu_nav">
+                <span className="nav">当前位置：</span>
+                <span className="layui-breadcrumb" lay-separator=">">
+                  <a href="#">首页</a>
+                  <a href="#">问答社区</a>
+                  <a href="#">{menu_title}</a>
+                </span>
+              </div>
+              {/*分类按钮*/}
+              <div className="cates_links">
+                <a
+                  href="#"
+                  className={cates_type === "recommend" ? "cates_active" : ""}
+                  onClick={() => this.changeCatesType("recommend")}
+                >
+                  推荐
+                </a>
+                <a
+                  href="#"
+                  className={cates_type === "zy" ? "cates_active" : ""}
+                  onClick={() => this.changeCatesType("zy")}
+                >
+                  作业(12312430)
+                </a>
+                <a
+                  href="#"
+                  className={cates_type === "wd" ? "cates_active" : ""}
+                  onClick={() => this.changeCatesType("wd")}
+                >
+                  问答(2123120)
+                </a>
+                <a
+                  href="#"
+                  className={cates_type === "zp" ? "cates_active" : ""}
+                  onClick={() => this.changeCatesType("zp")}
+                >
+                  作品(323120)
+                </a>
+                <a
+                  href="#"
+                  className={cates_type === "zh" ? "cates_active" : ""}
+                  onClick={() => this.changeCatesType("zh")}
+                >
+                  指绘(0323232)
+                </a>
+              </div>
+              {/*主要内容区域*/}
+              {main_compoent}
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>
